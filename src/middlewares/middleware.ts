@@ -1,7 +1,7 @@
 const b = 30
 
 const c = (n: number): number => {
-  return true
+  return false
 }
 
 console.log(c(b))
