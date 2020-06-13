@@ -6,9 +6,9 @@ const obj = {
   quantity: 30,
 }
 
-function printer() {
+function printer(): boolean {
   const a = 30
-  console.log('Goes printer message for user...')
+  console.log('Goes printer message for user...', a)
   return true
 }
 
