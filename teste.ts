@@ -3,7 +3,20 @@ const obj = {
   lastname: 'Rodrigues',
   email: 'deivid@gmail.com',
   contador: 30,
-  quantity: 30
+  quantity: 30,
 }
 
-console.log(obj)
+function printer(): boolean {
+  console.log('Goes printer message for user...')
+  return true
+}
+
+const functionOk = (msg: string): void => {
+  console.log('Be function...', msg)
+}
+
+functionOk('Olá, Deivid.')
+
+if (printer()) {
+  console.log(obj)
+}
