@@ -8,7 +8,7 @@ describe('SignUp Controller', () => {
       body: {
         email: 'any_email@mail.com.br',
         password: 'any_password',
-        passwordConfirmation: 'any_password',
+        confirmPassword: 'any_password',
       },
     }
 
@@ -26,7 +26,7 @@ describe('SignUp Controller', () => {
       body: {
         name: 'any_name',
         password: 'any_password',
-        passwordConfirmation: 'any_password',
+        confirmPassword: 'any_password',
       },
     }
 
@@ -43,7 +43,7 @@ describe('SignUp Controller', () => {
       body: {
         name: 'any_name',
         email: 'any_email@mail.com.br',
-        passwordConfirmation: 'any_password',
+        confirmPassword: 'any_password',
       },
     }
 
@@ -55,7 +55,7 @@ describe('SignUp Controller', () => {
     )
   })
 
-  test('Should return 400 if no passwordConfirmation is provided', async () => {
+  test('Should return 400 if no confirmPassword is provided', async () => {
     const signUpController = new SignUpController()
 
     const httpRequest = {
@@ -70,7 +70,7 @@ describe('SignUp Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body.messages[0]).toEqual(
-      'passwordConfirmation is a required field',
+      'confirmPassword is a required field',
     )
   })
 
@@ -89,7 +89,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body.messages).toEqual([
       'email is a required field',
-      'passwordConfirmation is a required field',
+      'confirmPassword is a required field',
     ])
   })
 
@@ -101,7 +101,7 @@ describe('SignUp Controller', () => {
         name: 'any_name',
         email: 'any_email',
         password: 'any_password',
-        passwordConfirmation: 'any_password',
+        confirmPassword: 'any_password',
       },
     }
 
@@ -109,6 +109,24 @@ describe('SignUp Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body.messages[0]).toEqual('email must be a valid email')
+  })
+
+  test('Should return 400 if password and ', async () => {
+    const signUpController = new SignUpController()
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+        confirmPassword: 'any_password',
+      },
+    }
+
+    const httpResponse = await signUpController.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body.name).toEqual('any_name')
   })
 
   test('Should return 200 if valid entry fields', async () => {
@@ -119,7 +137,7 @@ describe('SignUp Controller', () => {
         name: 'any_name',
         email: 'any_email@email.com',
         password: 'any_password',
-        passwordConfirmation: 'any_password',
+        confirmPassword: 'any_password',
       },
     }
 

@@ -8,7 +8,11 @@ export default class SignUpController implements Controller {
       name: Yup.string().required(),
       email: Yup.string().email().required(),
       password: Yup.string().required(),
-      passwordConfirmation: Yup.string().required(),
+      confirmPassword: Yup.string()
+        .required()
+        .when('password', (password: string, schema: Yup.StringSchema) =>
+          schema.oneOf([Yup.ref('password')]),
+        ),
     })
 
     return await schema
