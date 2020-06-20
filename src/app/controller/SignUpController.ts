@@ -1,7 +1,8 @@
+import Controller from '../protocols/controller'
 import { HttpRequest, HttpResponse } from '../protocols/http'
 import * as Yup from 'yup'
 
-export default class SignUpController {
+export default class SignUpController implements Controller {
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
