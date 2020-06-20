@@ -13,7 +13,7 @@ export default class SignUpController {
     return await schema
       .validate(httpRequest.body, { abortEarly: false })
       .then((obj) => {
-        return { statusCode: 0, body: obj }
+        return { statusCode: 200, body: obj }
       })
       .catch(
         (error: Yup.ValidationError): HttpResponse => {
