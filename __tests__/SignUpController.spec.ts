@@ -111,7 +111,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body.messages[0]).toEqual('email must be a valid email')
   })
 
-  test('Should return 400 if password and confirmPassword is not equal ', async () => {
+  test('Should return 400 if password and confirmPassword does not match', async () => {
     const signUpController = new SignUpController()
 
     const httpRequest = {
