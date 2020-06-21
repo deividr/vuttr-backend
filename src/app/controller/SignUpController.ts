@@ -11,7 +11,10 @@ export default class SignUpController implements Controller {
       confirmPassword: Yup.string()
         .required()
         .when('password', (password: string, schema: Yup.StringSchema) =>
-          schema.oneOf([Yup.ref('password')]),
+          schema.oneOf(
+            [Yup.ref('password')],
+            'password and confirmPassword does not match',
+          ),
         ),
     })
 
