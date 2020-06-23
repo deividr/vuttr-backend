@@ -147,5 +147,8 @@ describe('SignUp Controller', () => {
 
     expect(httpResponse.statusCode).toBe(200)
     expect(httpResponse.body.name).toEqual('any_name')
+    expect(httpResponse.body.email).toEqual('any_email@email.com')
+    expect(httpResponse.body.password).toEqual('any_password')
+    expect(httpResponse.body.confirmPassword).toEqual('any_password')
   })
 })
