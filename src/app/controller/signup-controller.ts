@@ -1,8 +1,15 @@
 import Controller from '../protocols/controller'
 import { HttpRequest, HttpResponse } from '../protocols/http'
 import * as Yup from 'yup'
+import { ICreateUser } from '../../domain/usercases/user/create-user'
 
 export default class SignUpController implements Controller {
+  private readonly user: ICreateUser
+
+  constructor(user: ICreateUser) {
+    this.user = user
+  }
+
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -20,8 +27,9 @@ export default class SignUpController implements Controller {
 
     return await schema
       .validate(httpRequest.body, { abortEarly: false })
-      .then((obj) => {
-        return { statusCode: 200, body: obj }
+      .then(async (obj) => {
+        const body = await this.user.create(httpRequest.body)
+        return { statusCode: 200, body }
       })
       .catch(
         (error: Yup.ValidationError): HttpResponse => {

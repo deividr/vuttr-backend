@@ -1,8 +1,31 @@
-import SignUpController from '../src/app/controller/SignUpController'
+import SignUpController from '../src/app/controller/signup-controller'
+import { ICreateUser } from '../src/domain/usercases/user/create-user'
+import { User } from '../src/domain/models/user'
+
+const makeUser = (): ICreateUser => {
+  class CreateUserStub implements ICreateUser {
+    async create(): Promise<User> {
+      return {
+        id: 'any_id',
+        name: 'any_name',
+        email: 'any_email@email.com',
+        password: 'any_password',
+      }
+    }
+  }
+
+  return new CreateUserStub()
+}
+
+const makeSignUpController = (): SignUpController => {
+  const createUserStub = makeUser()
+
+  return new SignUpController(createUserStub)
+}
 
 describe('SignUp Controller', () => {
   test('Should return 400 if no name is provided', async () => {
-    const signUpController = new SignUpController()
+    const signUpController = makeSignUpController()
 
     const httpRequest = {
       body: {
@@ -20,7 +43,7 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 400 if no email is provided', async () => {
-    const signUpController = new SignUpController()
+    const signUpController = makeSignUpController()
 
     const httpRequest = {
       body: {
@@ -37,7 +60,7 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 400 if no password is provided', async () => {
-    const signUpController = new SignUpController()
+    const signUpController = makeSignUpController()
 
     const httpRequest = {
       body: {
@@ -56,8 +79,7 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 400 if no confirmPassword is provided', async () => {
-    const signUpController = new SignUpController()
-
+    const signUpController = makeSignUpController()
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -75,7 +97,7 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 400 if more than two params is not provided', async () => {
-    const signUpController = new SignUpController()
+    const signUpController = makeSignUpController()
 
     const httpRequest = {
       body: {
@@ -94,7 +116,7 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 400 if email is invalid format', async () => {
-    const signUpController = new SignUpController()
+    const signUpController = makeSignUpController()
 
     const httpRequest = {
       body: {
@@ -112,7 +134,7 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 400 if password and confirmPassword does not match', async () => {
-    const signUpController = new SignUpController()
+    const signUpController = makeSignUpController()
 
     const httpRequest = {
       body: {
@@ -132,7 +154,7 @@ describe('SignUp Controller', () => {
   })
 
   test('Should return 200 if valid entry fields', async () => {
-    const signUpController = new SignUpController()
+    const signUpController = makeSignUpController()
 
     const httpRequest = {
       body: {
@@ -146,9 +168,9 @@ describe('SignUp Controller', () => {
     const httpResponse = await signUpController.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body.id).toEqual('any_id')
     expect(httpResponse.body.name).toEqual('any_name')
     expect(httpResponse.body.email).toEqual('any_email@email.com')
     expect(httpResponse.body.password).toEqual('any_password')
-    expect(httpResponse.body.confirmPassword).toEqual('any_password')
   })
 })
