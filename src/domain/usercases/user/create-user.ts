@@ -1,5 +1,5 @@
 import { User } from '../../models/user'
 
-export interface ICreateUser {
+export interface CreateUser {
   create: (userModel: User) => Promise<User>
 }

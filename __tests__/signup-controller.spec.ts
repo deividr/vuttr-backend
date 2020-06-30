@@ -1,9 +1,9 @@
 import SignUpController from '../src/app/controller/signup-controller'
-import { ICreateUser } from '../src/domain/usercases/user/create-user'
+import { CreateUser } from '../src/domain/usercases/user/create-user'
 import { User } from '../src/domain/models/user'
 
-const makeUser = (): ICreateUser => {
-  class CreateUserStub implements ICreateUser {
+const makeUser = (): CreateUser => {
+  class CreateUserStub implements CreateUser {
     async create(): Promise<User> {
       return {
         id: 'any_id',
