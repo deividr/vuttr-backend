@@ -2,17 +2,30 @@ import { CreateUser } from '../../../domain/usercases/user/create-user'
 import { DbCreateUser } from './db-create-user'
 import { Encrypter } from '../../protocols/encrypter'
 
-class EncrypterStub implements Encrypter {
-  async encrypt(value: string): Promise<string> {
-    return await Promise.resolve('valid_hashed')
+interface SutTypes {
+  dbCreateUser: CreateUser
+  encrypterStub: Encrypter
+}
+
+const makeSut = (): SutTypes => {
+  class EncrypterStub implements Encrypter {
+    async encrypt(value: string): Promise<string> {
+      return await Promise.resolve('valid_hashed')
+    }
+  }
+
+  const encrypterStub = new EncrypterStub()
+  const dbCreateUser: CreateUser = new DbCreateUser(encrypterStub)
+
+  return {
+    dbCreateUser,
+    encrypterStub,
   }
 }
 
 describe('Database Create User Case', () => {
   test('Should return ok when Encrypter call with correct password', async () => {
-    const encrypterStub = new EncrypterStub()
-
-    const createUserRepository: CreateUser = new DbCreateUser(encrypterStub)
+    const { dbCreateUser, encrypterStub } = makeSut()
 
     const spyHasher = jest.spyOn(encrypterStub, 'encrypt')
 
@@ -22,7 +35,7 @@ describe('Database Create User Case', () => {
       password: 'valid_password',
     }
 
-    const userReturned = await createUserRepository.create(userParams)
+    const userReturned = await dbCreateUser.create(userParams)
 
     expect(spyHasher).toHaveBeenCalledWith(userParams.password)
     expect(userReturned.password).toBe('valid_hashed')
