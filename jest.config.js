@@ -1,6 +1,6 @@
 module.exports = {
-  roots: ['__tests__', 'src/app'],
-  collectCoverageFrom: ['src/app/**/*.ts'],
+  roots: ['src'],
+  collectCoverageFrom: ['src/**/*.ts'],
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
   preset: 'ts-jest',

@@ -1,6 +1,6 @@
-import SignUpController from '../src/app/controller/signup-controller'
-import { CreateUser } from '../src/domain/usercases/user/create-user'
-import { User } from '../src/domain/models/user'
+import SignUpController from './signup-controller'
+import { CreateUser } from '../../domain/usercases/user/create-user'
+import { User } from '../../domain/models/user'
 
 const makeUser = (): CreateUser => {
   class CreateUserStub implements CreateUser {
