@@ -29,7 +29,9 @@ export default class SignUpController implements Controller {
     return await schema
       .validate(httpRequest.body, { abortEarly: false })
       .then(async (obj) => {
-        const body = await this.createUser.create(httpRequest.body)
+        const { name, email, password } = httpRequest.body
+
+        const body = await this.createUser.create({ name, email, password })
 
         return ok(body)
       })
