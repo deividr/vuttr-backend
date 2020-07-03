@@ -5,13 +5,22 @@ import {
 
 import { User } from '../../../domain/models/user'
 import { Encrypter } from '../../protocols/encrypter'
+import { CreateUserRepository } from '../../protocols/create-user-repository'
 
 export class DbCreateUser implements CreateUser {
-  constructor(private readonly encrypter: Encrypter) {}
+  constructor(
+    private readonly encrypter: Encrypter,
+    private readonly createUserRepository: CreateUserRepository,
+  ) {}
 
   async create(userParams: UserParams): Promise<User> {
-    await this.encrypter.encrypt(userParams.password)
+    const hashedPassoword = await this.encrypter.encrypt(userParams.password)
 
-    return { id: 'valid_id', ...userParams }
+    const user = await this.createUserRepository.add({
+      ...userParams,
+      password: hashedPassoword,
+    })
+
+    return user
   }
 }
