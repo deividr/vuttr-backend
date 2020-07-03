@@ -41,12 +41,12 @@ const makeUserParams = (): UserParams => {
 describe('Database Create User Case', () => {
   test('Should return ok when Encrypter call with correct password', async () => {
     const { dbCreateUser, encrypterStub } = makeSut()
-    const spyHasher = jest.spyOn(encrypterStub, 'encrypt')
+    const spyEncrypt = jest.spyOn(encrypterStub, 'encrypt')
     const userParams = makeUserParams()
 
     await dbCreateUser.create(userParams)
 
-    expect(spyHasher).toHaveBeenCalledWith(userParams.password)
+    expect(spyEncrypt).toHaveBeenCalledWith(userParams.password)
   })
 
   test('Should return throw when Encrypter throw', async () => {
