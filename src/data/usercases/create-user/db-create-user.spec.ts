@@ -40,7 +40,7 @@ const makeEncrypter = (): Encrypter => {
 
 const makeCreateUserRespository = (): CreateUserRepository => {
   class CreateUserRepositoryStub implements CreateUserRepository {
-    async add(userParams: CreateUserParams): Promise<UserModel> {
+    async create(userParams: CreateUserParams): Promise<UserModel> {
       return await Promise.resolve({
         id: 'valid_id',
         name: 'valid_name',
@@ -91,11 +91,11 @@ describe('Database Create User Case', () => {
     const { dbCreateUser, createUserRepositoryStub } = makeSut()
     const userParams = makeUserParams()
 
-    const addSpy = jest.spyOn(createUserRepositoryStub, 'add')
+    const createSpy = jest.spyOn(createUserRepositoryStub, 'create')
 
     await dbCreateUser.create(userParams)
 
-    expect(addSpy).toHaveBeenCalledWith({
+    expect(createSpy).toHaveBeenCalledWith({
       ...userParams,
       password: 'valid_hashed',
     })
@@ -106,7 +106,7 @@ describe('Database Create User Case', () => {
     const userParams = makeUserParams()
 
     jest
-      .spyOn(createUserRepositoryStub, 'add')
+      .spyOn(createUserRepositoryStub, 'create')
       .mockImplementationOnce(
         async () => await new Promise((resolve, reject) => reject(new Error())),
       )

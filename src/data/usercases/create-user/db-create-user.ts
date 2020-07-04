@@ -16,7 +16,7 @@ export class DbCreateUser implements CreateUser {
   async create(userParams: CreateUserParams): Promise<UserModel> {
     const hashedPassoword = await this.encrypter.encrypt(userParams.password)
 
-    const user = await this.createUserRepository.add({
+    const user = await this.createUserRepository.create({
       ...userParams,
       password: hashedPassoword,
     })
