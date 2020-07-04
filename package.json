@@ -13,10 +13,11 @@
     "test:ci": "yarn test --coverage"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/jest": "^26.0.0",
     "@types/node": "^14.0.13",
-    "@typescript-eslint/eslint-plugin": "3.3.0",
     "@types/yup": "^0.29.3",
+    "@typescript-eslint/eslint-plugin": "3.3.0",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard-with-typescript": "^18.0.2",
@@ -34,6 +35,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "yup": "^0.29.1"
   }
 }
