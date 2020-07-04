@@ -4,5 +4,11 @@
   "port": 5432,
   "username": "postgres",
   "password": "lu1312enzo",
-  "database": "vuttr"
+  "database": "vuttr",
+  "entities": ["./src/infra/database/typeorm/entities/*.ts"],
+  "migrations": ["./src/infra/database/typeorm/migrations/*.ts"],
+  "cli": {
+    "entitiesDir": "./src/infra/database/typeorm/entities",
+    "migrationsDir": "./src/infra/database/typeorm/migrations"
+  }
 }
