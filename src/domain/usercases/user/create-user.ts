@@ -1,7 +1,7 @@
-import { User } from '../../models/user'
+import { UserModel } from '../../models/user'
 
-export type UserParams = Omit<User, 'id'>
+export type CreateUserParams = Omit<UserModel, 'id'>
 
 export interface CreateUser {
-  create: (userParams: UserParams) => Promise<User>
+  create: (userParams: CreateUserParams) => Promise<UserModel>
 }

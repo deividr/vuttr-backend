@@ -1,11 +1,11 @@
 import {
   CreateUser,
-  UserParams,
+  CreateUserParams,
 } from '../../../domain/usercases/user/create-user'
 import { DbCreateUser } from './db-create-user'
 import { Encrypter } from '../../protocols/encrypter'
 import { CreateUserRepository } from '../../protocols/create-user-repository'
-import { User } from '../../../domain/models/user'
+import { UserModel } from '../../../domain/models/user'
 
 interface SutTypes {
   dbCreateUser: CreateUser
@@ -40,7 +40,7 @@ const makeEncrypter = (): Encrypter => {
 
 const makeCreateUserRespository = (): CreateUserRepository => {
   class CreateUserRepositoryStub implements CreateUserRepository {
-    async add(userParams: UserParams): Promise<User> {
+    async add(userParams: CreateUserParams): Promise<UserModel> {
       return await Promise.resolve({
         id: 'valid_id',
         name: 'valid_name',
@@ -53,7 +53,7 @@ const makeCreateUserRespository = (): CreateUserRepository => {
   return new CreateUserRepositoryStub()
 }
 
-const makeUserParams = (): UserParams => {
+const makeUserParams = (): CreateUserParams => {
   return {
     name: 'valid_name',
     email: 'valid_email@mail.com',

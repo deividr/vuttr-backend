@@ -1,9 +1,9 @@
 import {
   CreateUser,
-  UserParams,
+  CreateUserParams,
 } from '../../../domain/usercases/user/create-user'
 
-import { User } from '../../../domain/models/user'
+import { UserModel } from '../../../domain/models/user'
 import { Encrypter } from '../../protocols/encrypter'
 import { CreateUserRepository } from '../../protocols/create-user-repository'
 
@@ -13,7 +13,7 @@ export class DbCreateUser implements CreateUser {
     private readonly createUserRepository: CreateUserRepository,
   ) {}
 
-  async create(userParams: UserParams): Promise<User> {
+  async create(userParams: CreateUserParams): Promise<UserModel> {
     const hashedPassoword = await this.encrypter.encrypt(userParams.password)
 
     const user = await this.createUserRepository.add({

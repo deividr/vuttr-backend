@@ -1,10 +1,10 @@
 import SignUpController from './signup-controller'
 import { CreateUser } from '../../domain/usercases/user/create-user'
-import { User } from '../../domain/models/user'
+import { UserModel } from '../../domain/models/user'
 
 const makeUser = (): CreateUser => {
   class CreateUserStub implements CreateUser {
-    async create(): Promise<User> {
+    async create(): Promise<UserModel> {
       return {
         id: 'any_id',
         name: 'any_name',
