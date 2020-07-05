@@ -1,5 +1,6 @@
 import { UserRepository } from './user-repository'
-import { createConnection, getConnection } from 'typeorm'
+import { createConnection, getConnection, getRepository } from 'typeorm'
+import { User } from '../../entities/User'
 
 describe('User Repository Data Base', () => {
   beforeAll(async () => {
@@ -10,7 +11,7 @@ describe('User Repository Data Base', () => {
     await getConnection().close()
   })
 
-  test('should return an user when create on DB success', async () => {
+  test('should return an UserModel when UserRepository return success', async () => {
     const userRepository = new UserRepository()
 
     const createUserParams = {
@@ -26,5 +27,7 @@ describe('User Repository Data Base', () => {
     expect(user.name).toBe('valid_name')
     expect(user.email).toBe('valid_value@email.com.br')
     expect(user.password).toBe('valid_password')
+
+    await getRepository(User).delete(user.id)
   })
 })
