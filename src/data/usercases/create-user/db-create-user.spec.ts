@@ -1,11 +1,8 @@
-import {
-  CreateUser,
-  CreateUserParams,
-} from '../../../domain/usercases/user/create-user'
+import { CreateUser, CreateUserParams } from 'domain/usercases/user/create-user'
 import { DbCreateUser } from './db-create-user'
 import { Encrypter } from '../../protocols/encrypter'
 import { CreateUserRepository } from '../../protocols/create-user-repository'
-import { UserModel } from '../../../domain/models/user'
+import { UserModel } from 'domain/models/user'
 
 interface SutTypes {
   dbCreateUser: CreateUser

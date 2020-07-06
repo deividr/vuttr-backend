@@ -1,7 +1,7 @@
 import Controller from '../protocols/controller'
 import { HttpRequest, HttpResponse } from '../protocols/http'
 import * as Yup from 'yup'
-import { CreateUser } from '../../domain/usercases/user/create-user'
+import { CreateUser } from 'domain/usercases/user/create-user'
 import { badRequest, ok } from '../helpers/http/http-helpers'
 
 export default class SignUpController implements Controller {
