@@ -1,6 +1,9 @@
-import { CreateUser, CreateUserParams } from 'domain/usercases/user/create-user'
+import {
+  CreateUser,
+  CreateUserParams,
+} from '../../../domain/usercases/user/create-user'
 
-import { UserModel } from 'domain/models/user'
+import { UserModel } from '../../../domain/models/user'
 import { Encrypter } from '../../protocols/encrypter'
 import { CreateUserRepository } from '../../protocols/create-user-repository'
 

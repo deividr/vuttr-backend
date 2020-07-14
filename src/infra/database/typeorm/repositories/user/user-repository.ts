@@ -1,6 +1,6 @@
 import { CreateUserRepository } from '../../../../../data/protocols/create-user-repository'
-import { CreateUserParams } from 'domain/usercases/user/create-user'
-import { UserModel } from 'domain/models/user'
+import { CreateUserParams } from '../../../../../domain/usercases/user/create-user'
+import { UserModel } from '../../../../../domain/models/user'
 import { User } from '../../entities/User'
 import { getRepository } from 'typeorm'
 

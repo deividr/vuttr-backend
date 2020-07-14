@@ -15,7 +15,7 @@ describe('Application Express', () => {
   })
 
   test('Should midleware CORS enabel for routes', async () => {
-    app.post('test_enable_cors', (req, res) => {
+    app.post('/test_enable_cors', (req, res) => {
       res.send()
     })
 
