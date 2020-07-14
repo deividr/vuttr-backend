@@ -1,6 +1,7 @@
-import { createConnection, getConnection } from 'typeorm'
+import { createConnection, getConnection, getRepository } from 'typeorm'
 import request from 'supertest'
 import app from '../config/app'
+import { User } from '../../infra/database/typeorm/entities/User'
 
 describe('SignUp Routes', () => {
   beforeAll(async () => {
@@ -21,5 +22,8 @@ describe('SignUp Routes', () => {
         confirmPassword: 'p@$$word',
       })
       .expect(200)
+      .then(async (response) => {
+        await getRepository(User).delete(response.body.id)
+      })
   })
 })
