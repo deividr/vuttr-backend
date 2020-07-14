@@ -5,7 +5,7 @@
   "author": "Deivid Rodrigues <deivid.arodrigues@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "server:dev": "nodemon --exec sucrase-node ./src/main/server.ts",
+    "server:dev": "ts-node-dev ./src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test --watch -c jest-unit.config.js",
@@ -35,11 +35,10 @@
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "lint-staged": "10.2.11",
-    "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
-    "sucrase": "^3.15.0",
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.0",
+    "ts-node-dev": "^1.0.0-pre.51",
     "typescript": "^3.9.5"
   },
   "dependencies": {
