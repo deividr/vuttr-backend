@@ -1,5 +1,6 @@
 import Controller from '../../protocols/controller'
 import LoginController from './login-controller'
+import faker from 'faker'
 
 interface SutTypes {
   sut: Controller
@@ -18,9 +19,11 @@ describe('Login Controller', () => {
 
     const httpRequest = {
       body: {
-        password: 'joao_password',
+        password: faker.internet.password(),
       },
     }
+
+    console.log(httpRequest.body.password)
 
     const httpResponse = await sut.handle(httpRequest)
 
