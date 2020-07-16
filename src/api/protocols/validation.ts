@@ -1,3 +1,3 @@
-export default interface Validation {
-  validate: (input: any) => Error
+export interface Validation {
+  validate: (input: any) => void
 }
