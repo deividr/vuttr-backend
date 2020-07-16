@@ -23,7 +23,19 @@ describe('Login Controller', () => {
       },
     }
 
-    console.log(httpRequest.body.password)
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
+  })
+
+  test('should return 400 if no password is provided', async () => {
+    const { sut } = makeLoginController()
+
+    const httpRequest = {
+      body: {
+        email: faker.internet.email(),
+      },
+    }
 
     const httpResponse = await sut.handle(httpRequest)
 

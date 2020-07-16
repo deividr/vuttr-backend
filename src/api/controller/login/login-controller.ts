@@ -8,6 +8,11 @@ class LoginController implements Controller {
     if (!httpRequest.body.email) {
       return badRequest(new MissingParamError('Email'))
     }
+
+    if (!httpRequest.body.password) {
+      return badRequest(new MissingParamError('Password'))
+    }
+
     return ok({ body: '' })
   }
 }
