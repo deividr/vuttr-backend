@@ -3,39 +3,39 @@ import {
   CreateUserParams,
 } from '../../../domain/usercases/user/create-user'
 import { DbCreateUser } from './db-create-user'
-import { Encrypter } from '../../protocols/encrypter'
+import { Hasher } from '../../protocols/encrypter'
 import { CreateUserRepository } from '../../protocols/create-user-repository'
 import { UserModel } from '../../../domain/models/user'
 
 interface SutTypes {
   dbCreateUser: CreateUser
-  encrypterStub: Encrypter
+  hasherStub: Hasher
   createUserRepositoryStub: CreateUserRepository
 }
 
 const makeSut = (): SutTypes => {
-  const encrypterStub = makeEncrypter()
+  const hasherStub = makeHasher()
   const createUserRepositoryStub = makeCreateUserRespository()
   const dbCreateUser: CreateUser = new DbCreateUser(
-    encrypterStub,
+    hasherStub,
     createUserRepositoryStub,
   )
 
   return {
     dbCreateUser,
-    encrypterStub,
+    hasherStub: hasherStub,
     createUserRepositoryStub,
   }
 }
 
-const makeEncrypter = (): Encrypter => {
-  class EncrypterStub implements Encrypter {
-    async encrypt(value: string): Promise<string> {
+const makeHasher = (): Hasher => {
+  class HasherStub implements Hasher {
+    async hash(value: string): Promise<string> {
       return await Promise.resolve('valid_hashed')
     }
   }
 
-  return new EncrypterStub()
+  return new HasherStub()
 }
 
 const makeCreateUserRespository = (): CreateUserRepository => {
@@ -62,22 +62,22 @@ const makeUserParams = (): CreateUserParams => {
 }
 
 describe('Database Create User Case', () => {
-  test('Should return ok when Encrypter call with correct password', async () => {
-    const { dbCreateUser, encrypterStub } = makeSut()
-    const spyEncrypt = jest.spyOn(encrypterStub, 'encrypt')
+  test('Should return ok when Hasher call with correct password', async () => {
+    const { dbCreateUser, hasherStub } = makeSut()
+    const spyHash = jest.spyOn(hasherStub, 'hash')
     const userParams = makeUserParams()
 
     await dbCreateUser.create(userParams)
 
-    expect(spyEncrypt).toHaveBeenCalledWith(userParams.password)
+    expect(spyHash).toHaveBeenCalledWith(userParams.password)
   })
 
-  test('Should return throw when Encrypter throw', async () => {
-    const { dbCreateUser, encrypterStub } = makeSut()
+  test('Should return throw when Hasher throw', async () => {
+    const { dbCreateUser, hasherStub } = makeSut()
     const userParams = makeUserParams()
 
     jest
-      .spyOn(encrypterStub, 'encrypt')
+      .spyOn(hasherStub, 'hash')
       .mockImplementationOnce(
         async () => await new Promise((resolve, reject) => reject(new Error())),
       )
