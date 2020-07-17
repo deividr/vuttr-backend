@@ -1,15 +1,43 @@
-import SignUpController from './signup-controller'
-import { CreateUser } from '../../../domain/usercases/user/create-user'
+import { SignUpController } from './signup-controller'
+import {
+  CreateUser,
+  CreateUserParams,
+} from '../../../domain/usercases/user/create-user'
 import { UserModel } from '../../../domain/models/user'
+import { Validation } from '../../protocols/validation'
+import { Controller } from '../../protocols/controller'
+import { InvalidParamError } from '../../errors/invalid-param-error'
+import { HttpRequest } from '../../protocols/http'
+import { badRequest, ok } from '../../helpers/http/http-helpers'
+import faker from 'faker'
 
-const makeUser = (): CreateUser => {
+interface SutTypes {
+  sut: Controller
+  createUserStub: CreateUser
+  validationStub: Validation
+}
+
+const mockRequest = (): HttpRequest => {
+  const password = faker.internet.password()
+
+  return {
+    body: {
+      name: faker.name.findName(),
+      email: faker.internet.email(),
+      password,
+      confirmPassword: password,
+    },
+  }
+}
+
+const makeCreateUser = (): CreateUser => {
   class CreateUserStub implements CreateUser {
-    async create(): Promise<UserModel> {
+    async create(createUserParams: CreateUserParams): Promise<UserModel> {
       return {
-        id: 'any_id',
-        name: 'any_name',
-        email: 'any_email@email.com',
-        password: 'any_password',
+        id: faker.random.uuid(),
+        name: createUserParams.name,
+        email: createUserParams.email,
+        password: createUserParams.password,
       }
     }
   }
@@ -17,160 +45,72 @@ const makeUser = (): CreateUser => {
   return new CreateUserStub()
 }
 
-const makeSignUpController = (): SignUpController => {
-  const createUserStub = makeUser()
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(body: any): void {}
+  }
 
-  return new SignUpController(createUserStub)
+  return new ValidationStub()
+}
+
+const makeSut = (): SutTypes => {
+  const createUserStub = makeCreateUser()
+  const validationStub = makeValidation()
+  const sut = new SignUpController(createUserStub, validationStub)
+
+  return {
+    sut,
+    createUserStub,
+    validationStub,
+  }
 }
 
 describe('SignUp Controller', () => {
-  test('Should return 400 if no name is provided', async () => {
-    const signUpController = makeSignUpController()
+  test('should call Validation method with correct values', async () => {
+    const { sut, validationStub } = makeSut()
 
-    const httpRequest = {
-      body: {
-        email: 'any_email@mail.com.br',
-        password: 'any_password',
-        confirmPassword: 'any_password',
-      },
-    }
+    const validateSpy = jest.spyOn(validationStub, 'validate')
 
-    const httpResponse = await signUpController.handle(httpRequest)
+    const httpRequest = mockRequest()
 
-    expect(httpResponse.statusCode).toBe(400)
+    await sut.handle(httpRequest)
 
-    expect(httpResponse.body.messages[0]).toEqual('name is a required field')
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 
-  test('Should return 400 if no email is provided', async () => {
-    const signUpController = makeSignUpController()
+  test('should return 400 if Validation return an error', async () => {
+    const { sut, validationStub } = makeSut()
+
+    const { email, password, confirmPassword } = mockRequest().body
 
     const httpRequest = {
-      body: {
-        name: 'any_name',
-        password: 'any_password',
-        confirmPassword: 'any_password',
-      },
+      body: { email, password, confirmPassword },
     }
 
-    const httpResponse = await signUpController.handle(httpRequest)
+    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
+      throw new InvalidParamError('name is missing')
+    })
 
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body.messages[0]).toEqual('email is a required field')
-  })
+    const httpResponse = await sut.handle(httpRequest)
 
-  test('Should return 400 if no password is provided', async () => {
-    const signUpController = makeSignUpController()
-
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com.br',
-        confirmPassword: 'any_password',
-      },
-    }
-
-    const httpResponse = await signUpController.handle(httpRequest)
-
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body.messages[0]).toEqual(
-      'password is a required field',
+    expect(httpResponse).toEqual(
+      badRequest(new InvalidParamError('name is missing')),
     )
   })
 
-  test('Should return 400 if no confirmPassword is provided', async () => {
-    const signUpController = makeSignUpController()
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com.br',
-        password: 'any_password',
-      },
-    }
-
-    const httpResponse = await signUpController.handle(httpRequest)
-
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body.messages[0]).toEqual(
-      'confirmPassword is a required field',
-    )
+  test('should call CreateUser method with correct values', async () => {
+    const { sut, createUserStub } = makeSut()
+    const createSpy = jest.spyOn(createUserStub, 'create')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    const { name, email, password } = httpRequest.body
+    expect(createSpy).toHaveBeenCalledWith({ name, email, password })
   })
 
-  test('Should return 400 if more than two params is not provided', async () => {
-    const signUpController = makeSignUpController()
-
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        password: 'any_password',
-      },
-    }
-
-    const httpResponse = await signUpController.handle(httpRequest)
-
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body.messages).toEqual([
-      'email is a required field',
-      'confirmPassword is a required field',
-    ])
-  })
-
-  test('Should return 400 if email is invalid format', async () => {
-    const signUpController = makeSignUpController()
-
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email',
-        password: 'any_password',
-        confirmPassword: 'any_password',
-      },
-    }
-
-    const httpResponse = await signUpController.handle(httpRequest)
-
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body.messages[0]).toEqual('email must be a valid email')
-  })
-
-  test('Should return 400 if password and confirmPassword does not match', async () => {
-    const signUpController = makeSignUpController()
-
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@email.com',
-        password: 'any_password',
-        confirmPassword: 'any_passwordConfirmation',
-      },
-    }
-
-    const httpResponse = await signUpController.handle(httpRequest)
-
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body.messages[0]).toEqual(
-      'password and confirmPassword does not match',
-    )
-  })
-
-  test('Should return 200 if valid entry fields', async () => {
-    const signUpController = makeSignUpController()
-
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@email.com',
-        password: 'any_password',
-        confirmPassword: 'any_password',
-      },
-    }
-
-    const httpResponse = await signUpController.handle(httpRequest)
-
-    expect(httpResponse.statusCode).toBe(200)
-    expect(httpResponse.body.id).toEqual('any_id')
-    expect(httpResponse.body.name).toEqual('any_name')
-    expect(httpResponse.body.email).toEqual('any_email@email.com')
-    expect(httpResponse.body.password).toEqual('any_password')
+  test('should return 200 if valid entry fields', async () => {
+    const { sut } = makeSut()
+    const httpRequest = mockRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(ok(httpResponse.body))
   })
 })

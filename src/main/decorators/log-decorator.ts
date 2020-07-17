@@ -1,7 +1,7 @@
-import Controller from '../../api/protocols/controller'
+import { Controller } from '../../api/protocols/controller'
 import { HttpRequest, HttpResponse } from '../../api/protocols/http'
 
-class LogDecorator implements Controller {
+export class LogDecorator implements Controller {
   constructor(private readonly controller: Controller) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -9,5 +9,3 @@ class LogDecorator implements Controller {
     return httpResponse
   }
 }
-
-export default LogDecorator

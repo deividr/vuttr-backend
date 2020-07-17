@@ -1,9 +1,9 @@
 import { Validation } from '../../../api/protocols/validation'
-import * as Yup from 'yup'
 import { CreateUserParams } from '../../../domain/usercases/user/create-user'
-import InvalidParamError from '../../../api/errors/invalid-param-error'
+import { InvalidParamError } from '../../../api/errors/invalid-param-error'
+import * as Yup from 'yup'
 
-class SignupBodyRequestValidation implements Validation {
+export class SignupBodyRequestValidation implements Validation {
   validate(body: CreateUserParams): void {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -26,5 +26,3 @@ class SignupBodyRequestValidation implements Validation {
     }
   }
 }
-
-export default SignupBodyRequestValidation

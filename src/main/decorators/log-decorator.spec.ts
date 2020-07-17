@@ -1,6 +1,6 @@
-import Controller from '../../api/protocols/controller'
+import { Controller } from '../../api/protocols/controller'
 import { HttpRequest, HttpResponse } from '../../api/protocols/http'
-import LogDecorator from './log-decorator'
+import { LogDecorator } from './log-decorator'
 
 interface SutTypes {
   sut: Controller

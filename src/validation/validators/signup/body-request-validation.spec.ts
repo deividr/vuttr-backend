@@ -1,7 +1,7 @@
 import { Validation } from '../../../api/protocols/validation'
-import SignupBodyRequestValidation from './body-request-validation'
+import { SignupBodyRequestValidation } from './body-request-validation'
+import { InvalidParamError } from '../../../api/errors/invalid-param-error'
 import faker from 'faker'
-import InvalidParamError from '../../../api/errors/invalid-param-error'
 
 interface SutTypes {
   sut: Validation

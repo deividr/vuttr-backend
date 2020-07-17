@@ -1,46 +1,26 @@
-import Controller from '../../protocols/controller'
+import { Controller } from '../../protocols/controller'
 import { HttpRequest, HttpResponse } from '../../protocols/http'
-import * as Yup from 'yup'
 import { CreateUser } from '../../../domain/usercases/user/create-user'
 import { badRequest, ok } from '../../helpers/http/http-helpers'
+import { Validation } from '../../protocols/validation'
 
-export default class SignUpController implements Controller {
-  private readonly createUser: CreateUser
-
-  constructor(user: CreateUser) {
-    this.createUser = user
-  }
+export class SignUpController implements Controller {
+  constructor(
+    private readonly createUser: CreateUser,
+    private readonly validation: Validation,
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      email: Yup.string().email().required(),
-      password: Yup.string().required(),
-      confirmPassword: Yup.string()
-        .required()
-        .when('password', (password: string, schema: Yup.StringSchema) =>
-          schema.oneOf(
-            [Yup.ref('password')],
-            'password and confirmPassword does not match',
-          ),
-        ),
-    })
+    try {
+      this.validation.validate(httpRequest.body)
 
-    return await schema
-      .validate(httpRequest.body, { abortEarly: false })
-      .then(async (obj) => {
-        const { name, email, password } = httpRequest.body
+      const { name, email, password } = httpRequest.body
 
-        const body = await this.createUser.create({ name, email, password })
+      const body = await this.createUser.create({ name, email, password })
 
-        return ok(body)
-      })
-      .catch(
-        (error: Yup.ValidationError): HttpResponse => {
-          const messagesError = error.inner.map((error) => error.message)
-
-          return badRequest({ messages: messagesError })
-        },
-      )
+      return ok(body)
+    } catch (error) {
+      return badRequest(error)
+    }
   }
 }

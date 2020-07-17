@@ -1,4 +1,4 @@
-import Controller from '../../protocols/controller'
+import { Controller } from '../../protocols/controller'
 import LoginController from './login-controller'
 import faker from 'faker'
 

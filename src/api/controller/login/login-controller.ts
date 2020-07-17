@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponse } from '../../protocols/http'
-import Controller from '../../protocols/controller'
-import InvalidParamError from '../../errors/invalid-param-error'
+import { Controller } from '../../protocols/controller'
+import { InvalidParamError } from '../../errors/invalid-param-error'
 import { badRequest, ok } from '../../helpers/http/http-helpers'
 
 class LoginController implements Controller {

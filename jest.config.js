@@ -1,6 +1,6 @@
 module.exports = {
-  roots: ['src'],
-  collectCoverageFrom: ['src/**/*.ts'],
+  roots: ['<rootDir>/src'],
+  collectCoverageFrom: ['<rootDir>/src/**/*.ts', '!<rootDir>/src/main/*'],
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: [
     '<rootDir>/src/infra/database/typeorm/migrations',
