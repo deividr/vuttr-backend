@@ -2,6 +2,7 @@ import { createConnection, getConnection, getRepository } from 'typeorm'
 import { User } from '../../infra/database/typeorm/entities/User'
 import app from '../config/app'
 import request from 'supertest'
+import faker from 'faker'
 
 describe('SignUp Routes', () => {
   beforeAll(async () => {
@@ -13,13 +14,14 @@ describe('SignUp Routes', () => {
   })
 
   test('should return 200 on signup', async () => {
+    const password = faker.internet.password()
     await request(app)
       .post('/api/signup')
       .send({
-        name: 'deivid',
-        email: 'deivid@gmail.com.br',
-        password: 'p@$$word',
-        confirmPassword: 'p@$$word',
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        password,
+        confirmPassword: password,
       })
       .expect(200)
       .then(async (response) => {
