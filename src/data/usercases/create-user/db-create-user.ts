@@ -14,11 +14,11 @@ export class DbCreateUser implements CreateUser {
   ) {}
 
   async create(userParams: CreateUserParams): Promise<UserModel> {
-    const hashedPassoword = await this.hasher.hash(userParams.password)
+    const hashedPassword = await this.hasher.hash(userParams.password)
 
     const user = await this.createUserRepository.create({
       ...userParams,
-      password: hashedPassoword,
+      password: hashedPassword,
     })
 
     return user
