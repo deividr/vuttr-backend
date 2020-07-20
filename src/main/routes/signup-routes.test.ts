@@ -13,7 +13,7 @@ describe('SignUp Routes', () => {
     await getConnection().close()
   })
 
-  test('should return 200 on signup', async () => {
+  test('should return 201 on signup', async () => {
     const password = faker.internet.password()
     await request(app)
       .post('/api/signup')
@@ -23,7 +23,7 @@ describe('SignUp Routes', () => {
         password,
         confirmPassword: password,
       })
-      .expect(200)
+      .expect(201)
       .then(async (response) => {
         await getRepository(User).delete(response.body.id)
       })

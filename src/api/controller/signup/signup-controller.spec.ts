@@ -8,7 +8,7 @@ import { Validation } from '../../protocols/validation'
 import { Controller } from '../../protocols/controller'
 import { InvalidParamError } from '../../errors/invalid-param-error'
 import { HttpRequest } from '../../protocols/http'
-import { badRequest, ok } from '../../helpers/http/http-helpers'
+import { badRequest, created } from '../../helpers/http/http-helpers'
 import faker from 'faker'
 
 interface SutTypes {
@@ -111,6 +111,6 @@ describe('SignUp Controller', () => {
     const { sut } = makeSut()
     const httpRequest = mockRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok(httpResponse.body))
+    expect(httpResponse).toEqual(created(httpResponse.body))
   })
 })

@@ -1,7 +1,7 @@
 import { Controller } from '../../protocols/controller'
 import { HttpRequest, HttpResponse } from '../../protocols/http'
 import { CreateUser } from '../../../domain/usercases/user/create-user'
-import { badRequest, ok } from '../../helpers/http/http-helpers'
+import { badRequest, created } from '../../helpers/http/http-helpers'
 import { Validation } from '../../protocols/validation'
 
 export class SignUpController implements Controller {
@@ -18,7 +18,7 @@ export class SignUpController implements Controller {
 
       const body = await this.createUser.create({ name, email, password })
 
-      return ok(body)
+      return created(body)
     } catch (error) {
       return badRequest(error)
     }
