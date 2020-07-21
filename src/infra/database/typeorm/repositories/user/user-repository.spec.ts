@@ -12,23 +12,35 @@ describe('User Repository Data Base', () => {
     await getConnection().close()
   })
 
-  test('should return an UserModel when UserRepository return success', async () => {
-    const userRepository = new UserRepository()
+  describe('create()', () => {
+    test('should return an UserModel when UserRepository return success', async () => {
+      const userRepository = new UserRepository()
 
-    const createUserParams = {
-      name: faker.name.findName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    }
+      const createUserParams = {
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      }
 
-    const user = await userRepository.create(createUserParams)
+      const user = await userRepository.create(createUserParams)
 
-    expect(user).toBeTruthy()
-    expect(user.id).toBeTruthy()
-    expect(user.name).toBe(createUserParams.name)
-    expect(user.email).toBe(createUserParams.email)
-    expect(user.password).toBe(createUserParams.password)
+      expect(user).toBeTruthy()
+      expect(user.id).toBeTruthy()
+      expect(user.name).toBe(createUserParams.name)
+      expect(user.email).toBe(createUserParams.email)
+      expect(user.password).toBe(createUserParams.password)
 
-    await getRepository(User).delete(user.id)
+      await getRepository(User).delete(user.id)
+    })
+  })
+
+  describe('loadUserByEmail()', () => {
+    test('should return null if loadUserByEmail fail', async () => {
+      const userRepository = new UserRepository()
+      const result = await userRepository.loadUserByEmail(
+        faker.internet.email(),
+      )
+      expect(result).toBeNull()
+    })
   })
 })

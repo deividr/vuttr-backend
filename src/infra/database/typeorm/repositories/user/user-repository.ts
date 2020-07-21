@@ -3,8 +3,10 @@ import { CreateUserParams } from '../../../../../domain/usercases/user/create-us
 import { UserModel } from '../../../../../domain/models/user'
 import { User } from '../../entities/User'
 import { getRepository } from 'typeorm'
+import { LoadUserByEmailRepository } from '../../../../../data/protocols/load-user-by-email-repository'
 
-export class UserRepository implements CreateUserRepository {
+export class UserRepository
+  implements CreateUserRepository, LoadUserByEmailRepository {
   async create({
     name,
     email,
@@ -15,5 +17,18 @@ export class UserRepository implements CreateUserRepository {
     const user = await userRepository.create({ name, email, password }).save()
 
     return user
+  }
+
+  async loadUserByEmail(email: string): Promise<UserModel | null> {
+    const user = await getRepository(User)
+      .createQueryBuilder('users')
+      .where('users.email = :email', { email })
+      .getOne()
+
+    if (user) {
+      return user
+    } else {
+      return null
+    }
   }
 }

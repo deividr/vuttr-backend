@@ -3,6 +3,7 @@ import { HttpRequest, HttpResponse } from '../../protocols/http'
 import { CreateUser } from '../../../domain/usercases/user/create-user'
 import { badRequest, created } from '../../helpers/http/http-helpers'
 import { Validation } from '../../protocols/validation'
+import { EmailAlreadyExistError } from '../../errors/email-already-exist-error'
 
 export class SignUpController implements Controller {
   constructor(
@@ -18,7 +19,11 @@ export class SignUpController implements Controller {
 
       const body = await this.createUser.create({ name, email, password })
 
-      return created(body)
+      if (body) {
+        return created(body)
+      } else {
+        return badRequest(new EmailAlreadyExistError())
+      }
     } catch (error) {
       return badRequest(error)
     }

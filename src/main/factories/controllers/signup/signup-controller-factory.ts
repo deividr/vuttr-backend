@@ -9,7 +9,11 @@ import { LogDecorator } from '../../../decorators/log-decorator'
 export default (): Controller => {
   const encrypter = new BcryptAdapter()
   const createUserRepository = new UserRepository()
-  const dbCreateUser = new DbCreateUser(encrypter, createUserRepository)
+  const dbCreateUser = new DbCreateUser(
+    encrypter,
+    createUserRepository,
+    createUserRepository,
+  )
   const validation = new SignupBodyRequestValidation()
   const signupController = new SignUpController(dbCreateUser, validation)
   return new LogDecorator(signupController)

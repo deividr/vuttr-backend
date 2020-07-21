@@ -6,21 +6,31 @@ import {
 import { UserModel } from '../../../domain/models/user'
 import { Hasher } from '../../protocols/encrypter'
 import { CreateUserRepository } from '../../protocols/create-user-repository'
+import { LoadUserByEmailRepository } from '../../protocols/load-user-by-email-repository'
 
 export class DbCreateUser implements CreateUser {
   constructor(
     private readonly hasher: Hasher,
+    private readonly loadUserByEmailRepository: LoadUserByEmailRepository,
     private readonly createUserRepository: CreateUserRepository,
   ) {}
 
-  async create(userParams: CreateUserParams): Promise<UserModel> {
-    const hashedPassword = await this.hasher.hash(userParams.password)
+  async create(userParams: CreateUserParams): Promise<UserModel | null> {
+    let user = await this.loadUserByEmailRepository.loadUserByEmail(
+      userParams.email,
+    )
 
-    const user = await this.createUserRepository.create({
-      ...userParams,
-      password: hashedPassword,
-    })
+    if (!user) {
+      const hashedPassword = await this.hasher.hash(userParams.password)
 
-    return user
+      user = await this.createUserRepository.create({
+        ...userParams,
+        password: hashedPassword,
+      })
+
+      return user
+    }
+
+    return null
   }
 }

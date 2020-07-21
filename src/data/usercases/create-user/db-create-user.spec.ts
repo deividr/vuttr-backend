@@ -6,26 +6,57 @@ import { DbCreateUser } from './db-create-user'
 import { Hasher } from '../../protocols/encrypter'
 import { CreateUserRepository } from '../../protocols/create-user-repository'
 import { UserModel } from '../../../domain/models/user'
+import { LoadUserByEmailRepository } from '../../protocols/load-user-by-email-repository'
+import faker from 'faker'
+
+class CreateUserRepositoryStub implements CreateUserRepository {
+  userCreated: UserModel
+
+  async create(userParams: CreateUserParams): Promise<UserModel> {
+    this.userCreated = await Promise.resolve({
+      id: faker.random.uuid(),
+      name: userParams.name,
+      email: userParams.email,
+      password: userParams.password,
+    })
+
+    return this.userCreated
+  }
+}
 
 interface SutTypes {
   dbCreateUser: CreateUser
   hasherStub: Hasher
-  createUserRepositoryStub: CreateUserRepository
+  loadUserByEmailRepositoryStub: LoadUserByEmailRepository
+  createUserRepositoryStub: CreateUserRepositoryStub
 }
 
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher()
-  const createUserRepositoryStub = makeCreateUserRespository()
+  const createUserRepositoryStub = new CreateUserRepositoryStub()
+  const loadUserByEmailRepositoryStub = makeLoadUserByEmailRespository()
   const dbCreateUser: CreateUser = new DbCreateUser(
     hasherStub,
+    loadUserByEmailRepositoryStub,
     createUserRepositoryStub,
   )
 
   return {
     dbCreateUser,
     hasherStub: hasherStub,
+    loadUserByEmailRepositoryStub,
     createUserRepositoryStub,
   }
+}
+
+const makeLoadUserByEmailRespository = (): LoadUserByEmailRepository => {
+  class LoadUserByEmailRepositoryStub implements LoadUserByEmailRepository {
+    async loadUserByEmail(email: string): Promise<UserModel | null> {
+      return null
+    }
+  }
+
+  return new LoadUserByEmailRepositoryStub()
 }
 
 const makeHasher = (): Hasher => {
@@ -38,26 +69,20 @@ const makeHasher = (): Hasher => {
   return new HasherStub()
 }
 
-const makeCreateUserRespository = (): CreateUserRepository => {
-  class CreateUserRepositoryStub implements CreateUserRepository {
-    async create(userParams: CreateUserParams): Promise<UserModel> {
-      return await Promise.resolve({
-        id: 'valid_id',
-        name: 'valid_name',
-        email: 'valid_email@mail.com',
-        password: 'valid_hashed',
-      })
-    }
+const mockUserParams = (): CreateUserParams => {
+  return {
+    name: faker.name.findName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
   }
-
-  return new CreateUserRepositoryStub()
 }
 
-const makeUserParams = (): CreateUserParams => {
+const mockUser = (): UserModel => {
   return {
-    name: 'valid_name',
-    email: 'valid_email@mail.com',
-    password: 'valid_password',
+    id: faker.random.uuid(),
+    name: faker.name.findName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
   }
 }
 
@@ -65,7 +90,7 @@ describe('Database Create User Case', () => {
   test('Should return ok when Hasher call with correct password', async () => {
     const { dbCreateUser, hasherStub } = makeSut()
     const spyHash = jest.spyOn(hasherStub, 'hash')
-    const userParams = makeUserParams()
+    const userParams = mockUserParams()
 
     await dbCreateUser.create(userParams)
 
@@ -74,7 +99,7 @@ describe('Database Create User Case', () => {
 
   test('Should return throw when Hasher throw', async () => {
     const { dbCreateUser, hasherStub } = makeSut()
-    const userParams = makeUserParams()
+    const userParams = mockUserParams()
 
     jest
       .spyOn(hasherStub, 'hash')
@@ -89,7 +114,7 @@ describe('Database Create User Case', () => {
 
   test('Should call CreateUserRepository with correct values', async () => {
     const { dbCreateUser, createUserRepositoryStub } = makeSut()
-    const userParams = makeUserParams()
+    const userParams = mockUserParams()
 
     const createSpy = jest.spyOn(createUserRepositoryStub, 'create')
 
@@ -103,7 +128,7 @@ describe('Database Create User Case', () => {
 
   test('Should return throw when CreateUserRepository throw', async () => {
     const { dbCreateUser, createUserRepositoryStub } = makeSut()
-    const userParams = makeUserParams()
+    const userParams = mockUserParams()
 
     jest
       .spyOn(createUserRepositoryStub, 'create')
@@ -116,14 +141,22 @@ describe('Database Create User Case', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return User when CreateUser sucess', async () => {
-    const { dbCreateUser } = makeSut()
-    const userParams = makeUserParams()
-
+  test('Should return User when CreateUser success', async () => {
+    const { dbCreateUser, createUserRepositoryStub } = makeSut()
+    const userParams = mockUserParams()
     const user = await dbCreateUser.create(userParams)
+    expect(user).toEqual(createUserRepositoryStub.userCreated)
+  })
 
-    expect(user).toHaveProperty('id')
-    expect(user.id).toEqual('valid_id')
-    expect(user.password).toEqual('valid_hashed')
+  test('should return null if email provided already exist', async () => {
+    const { dbCreateUser, loadUserByEmailRepositoryStub } = makeSut()
+
+    jest
+      .spyOn(loadUserByEmailRepositoryStub, 'loadUserByEmail')
+      .mockResolvedValueOnce(mockUser())
+
+    const user = await dbCreateUser.create(mockUserParams())
+
+    expect(user).toBeNull()
   })
 })

@@ -7,6 +7,7 @@ import { UserModel } from '../../../domain/models/user'
 import { Validation } from '../../protocols/validation'
 import { Controller } from '../../protocols/controller'
 import { InvalidParamError } from '../../errors/invalid-param-error'
+import { EmailAlreadyExistError } from '../../errors/email-already-exist-error'
 import { HttpRequest } from '../../protocols/http'
 import { badRequest, created } from '../../helpers/http/http-helpers'
 import faker from 'faker'
@@ -105,6 +106,15 @@ describe('SignUp Controller', () => {
     await sut.handle(httpRequest)
     const { name, email, password } = httpRequest.body
     expect(createSpy).toHaveBeenCalledWith({ name, email, password })
+  })
+
+  test('should return 400 if email provided already used', async () => {
+    const { sut, createUserStub } = makeSut()
+    jest
+      .spyOn(createUserStub, 'create')
+      .mockResolvedValueOnce(Promise.resolve(null))
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual(badRequest(new EmailAlreadyExistError()))
   })
 
   test('should return 200 if valid entry fields', async () => {

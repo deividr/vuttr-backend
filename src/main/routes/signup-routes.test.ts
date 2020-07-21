@@ -33,9 +33,9 @@ describe('SignUp Routes', () => {
     await request(app)
       .post('/api/signup')
       .send({
-        name: 'deivid',
-        password: 'p@$$word',
-        confirmPassword: 'p@$$word',
+        name: faker.name.findName(),
+        password: faker.internet.password(),
+        confirmPassword: faker.internet.password(),
       })
       .expect(400)
   })
