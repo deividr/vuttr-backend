@@ -9,6 +9,7 @@ import {
 } from '../../../domain/usercases/user/authentication'
 import { AuthenticationModel } from '../../../domain/models/authentication'
 import faker from 'faker'
+import { unauthorized } from '../../helpers/http/http-helpers'
 
 interface SutTypes {
   sut: Controller
@@ -77,8 +78,17 @@ describe('Login Controller', () => {
   test('should call Authentication method', async () => {
     const { sut, authenticationStub } = makeSut()
     const authSpy = jest.spyOn(authenticationStub, 'auth')
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
-    expect(authSpy).toHaveBeenCalledWith(httpRequest.body)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(authSpy).toHaveBeenCalledWith(request.body)
+  })
+
+  test('should return 401 invalid credentials are provided', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest
+      .spyOn(authenticationStub, 'auth')
+      .mockReturnValueOnce(Promise.resolve(null))
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual(unauthorized())
   })
 })
