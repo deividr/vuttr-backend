@@ -8,18 +8,18 @@ import {
   AuthenticationParams,
 } from '../../../domain/usercases/user/authentication'
 import { AuthenticationModel } from '../../../domain/models/authentication'
+import { unauthorized, ok } from '../../helpers/http/http-helpers'
 import faker from 'faker'
-import { unauthorized } from '../../helpers/http/http-helpers'
 
 interface SutTypes {
   sut: Controller
   validationStub: Validation
-  authenticationStub: Authentication
+  authenticationStub: AuthenticationStub
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = makeValidation()
-  const authenticationStub = makeAuthenticationStub()
+  const authenticationStub = new AuthenticationStub()
   const sut = new LoginController(validationStub, authenticationStub)
   return {
     sut,
@@ -36,16 +36,15 @@ const makeValidation = (): Validation => {
   return new ValidationStub()
 }
 
-const makeAuthenticationStub = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth(
-      authenticationParams: AuthenticationParams,
-    ): Promise<AuthenticationModel | null> {
-      return null
-    }
-  }
+class AuthenticationStub implements Authentication {
+  authModel: AuthenticationModel
 
-  return new AuthenticationStub()
+  async auth(
+    authenticationParams: AuthenticationParams,
+  ): Promise<AuthenticationModel | null> {
+    this.authModel = { accessToken: 'any_token', name: 'any_name' }
+    return this.authModel
+  }
 }
 
 const mockRequest = (): HttpRequest => {
@@ -90,5 +89,11 @@ describe('Login Controller', () => {
       .mockReturnValueOnce(Promise.resolve(null))
     const response = await sut.handle(mockRequest())
     expect(response).toEqual(unauthorized())
+  })
+
+  test('should return 200 if valid credentials are provided', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual(ok(authenticationStub.authModel))
   })
 })
