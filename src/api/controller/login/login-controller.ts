@@ -1,19 +1,18 @@
 import { HttpRequest, HttpResponse } from '../../protocols/http'
 import { Controller } from '../../protocols/controller'
-import { InvalidParamError } from '../../errors/invalid-param-error'
 import { badRequest, created } from '../../helpers/http/http-helpers'
+import { Validation } from '../../protocols/validation'
 
 class LoginController implements Controller {
+  constructor(private readonly validation: Validation) {}
+
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    if (!httpRequest.body.email) {
-      return badRequest(new InvalidParamError('Email'))
+    try {
+      this.validation.validate(httpRequest.body)
+      return created({ body: '' })
+    } catch (error) {
+      return badRequest(error)
     }
-
-    if (!httpRequest.body.password) {
-      return badRequest(new InvalidParamError('Password'))
-    }
-
-    return created({ body: '' })
   }
 }
 
