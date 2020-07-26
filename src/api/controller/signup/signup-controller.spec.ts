@@ -9,7 +9,11 @@ import { Controller } from '../../protocols/controller'
 import { InvalidParamError } from '../../errors/invalid-param-error'
 import { EmailAlreadyExistError } from '../../errors/email-already-exist-error'
 import { HttpRequest } from '../../protocols/http'
-import { badRequest, created } from '../../helpers/http/http-helpers'
+import {
+  badRequest,
+  created,
+  serverError,
+} from '../../helpers/http/http-helpers'
 import faker from 'faker'
 
 interface SutTypes {
@@ -115,6 +119,15 @@ describe('SignUp Controller', () => {
       .mockResolvedValueOnce(Promise.resolve(null))
     const response = await sut.handle(mockRequest())
     expect(response).toEqual(badRequest(new EmailAlreadyExistError()))
+  })
+
+  test('should return 500 if CreateUser throws', async () => {
+    const { sut, createUserStub } = makeSut()
+    jest.spyOn(createUserStub, 'create').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual(serverError(new Error()))
   })
 
   test('should return 200 if valid entry fields', async () => {

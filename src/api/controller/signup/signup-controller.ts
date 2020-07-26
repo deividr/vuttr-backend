@@ -1,9 +1,14 @@
 import { Controller } from '../../protocols/controller'
 import { HttpRequest, HttpResponse } from '../../protocols/http'
 import { CreateUser } from '../../../domain/usercases/user/create-user'
-import { badRequest, created } from '../../helpers/http/http-helpers'
+import {
+  badRequest,
+  created,
+  serverError,
+} from '../../helpers/http/http-helpers'
 import { Validation } from '../../protocols/validation'
 import { EmailAlreadyExistError } from '../../errors/email-already-exist-error'
+import { InvalidParamError } from '../../errors/invalid-param-error'
 
 export class SignUpController implements Controller {
   constructor(
@@ -25,7 +30,11 @@ export class SignUpController implements Controller {
         return badRequest(new EmailAlreadyExistError())
       }
     } catch (error) {
-      return badRequest(error)
+      if (error instanceof InvalidParamError) {
+        return badRequest(error)
+      } else {
+        return serverError(error)
+      }
     }
   }
 }
