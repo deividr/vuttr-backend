@@ -1,21 +1,29 @@
 import { Controller } from '../../protocols/controller'
-import LoginController from './login-controller'
+import { LoginController } from './login-controller'
 import { HttpRequest } from '../../protocols/http'
-import faker from 'faker'
 import { Validation } from '../../protocols/validation'
 import { InvalidParamError } from '../../errors/invalid-param-error'
+import {
+  Authentication,
+  AuthenticationParams,
+} from '../../../domain/usercases/user/authentication'
+import { AuthenticationModel } from '../../../domain/models/authentication'
+import faker from 'faker'
 
 interface SutTypes {
   sut: Controller
   validationStub: Validation
+  authenticationStub: Authentication
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = makeValidation()
-  const sut = new LoginController(validationStub)
+  const authenticationStub = makeAuthenticationStub()
+  const sut = new LoginController(validationStub, authenticationStub)
   return {
     sut,
     validationStub,
+    authenticationStub,
   }
 }
 
@@ -25,6 +33,18 @@ const makeValidation = (): Validation => {
   }
 
   return new ValidationStub()
+}
+
+const makeAuthenticationStub = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth(
+      authenticationParams: AuthenticationParams,
+    ): Promise<AuthenticationModel | null> {
+      return null
+    }
+  }
+
+  return new AuthenticationStub()
 }
 
 const mockRequest = (): HttpRequest => {
@@ -52,5 +72,13 @@ describe('Login Controller', () => {
     })
     const httpResponse = await sut.handle({})
     expect(httpResponse.statusCode).toBe(400)
+  })
+
+  test('should call Authentication method', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(authSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })

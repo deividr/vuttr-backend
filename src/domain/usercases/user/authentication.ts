@@ -1,3 +1,12 @@
-export default interface Authentication {
-  auth: (input: string) => {}
+import { AuthenticationModel } from '../../models/authentication'
+
+export interface AuthenticationParams {
+  email: string
+  password: string
+}
+
+export interface Authentication {
+  auth: (
+    authenticationParams: AuthenticationParams,
+  ) => Promise<AuthenticationModel | null>
 }
