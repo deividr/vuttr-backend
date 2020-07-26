@@ -8,7 +8,7 @@ import {
   AuthenticationParams,
 } from '../../../domain/usercases/user/authentication'
 import { AuthenticationModel } from '../../../domain/models/authentication'
-import { unauthorized, ok } from '../../helpers/http/http-helpers'
+import { unauthorized, ok, serverError } from '../../helpers/http/http-helpers'
 import faker from 'faker'
 
 interface SutTypes {
@@ -89,6 +89,15 @@ describe('Login Controller', () => {
       .mockReturnValueOnce(Promise.resolve(null))
     const response = await sut.handle(mockRequest())
     expect(response).toEqual(unauthorized())
+  })
+
+  test('should return 500 if Authentication trows', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual(serverError(new Error()))
   })
 
   test('should return 200 if valid credentials are provided', async () => {

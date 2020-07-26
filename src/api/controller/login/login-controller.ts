@@ -1,8 +1,14 @@
 import { HttpRequest, HttpResponse } from '../../protocols/http'
 import { Controller } from '../../protocols/controller'
-import { ok, unauthorized, badRequest } from '../../helpers/http/http-helpers'
+import {
+  ok,
+  unauthorized,
+  badRequest,
+  serverError,
+} from '../../helpers/http/http-helpers'
 import { Validation } from '../../protocols/validation'
 import { Authentication } from '../../../domain/usercases/user/authentication'
+import { InvalidParamError } from '../../errors/invalid-param-error'
 
 export class LoginController implements Controller {
   constructor(
@@ -22,7 +28,11 @@ export class LoginController implements Controller {
         return unauthorized()
       }
     } catch (error) {
-      return badRequest(error)
+      if (error instanceof InvalidParamError) {
+        return badRequest(error)
+      } else {
+        return serverError(error)
+      }
     }
   }
 }
