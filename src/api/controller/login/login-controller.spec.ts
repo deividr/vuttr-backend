@@ -47,18 +47,10 @@ describe('Login Controller', () => {
 
   test('should return 400 if any parameters are not provided', async () => {
     const { sut, validationStub } = makeSut()
-
     jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
       throw new InvalidParamError('')
     })
-
-    const httpRequest = {
-      body: {
-        password: faker.internet.password(),
-      },
-    }
-
-    const httpResponse = await sut.handle(httpRequest)
+    const httpResponse = await sut.handle({})
     expect(httpResponse.statusCode).toBe(400)
   })
 })
