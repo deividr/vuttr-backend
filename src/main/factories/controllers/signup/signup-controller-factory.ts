@@ -1,6 +1,6 @@
 import { SignUpController } from '../../../../api/controller/signup/signup-controller'
 import { Controller } from '../../../../api/protocols/controller'
-import { DbCreateUser } from '../../../../data/usercases/create-user/db-create-user'
+import { DbCreateUser } from '../../../../data/usercases/user/create-user/db-create-user'
 import { BcryptAdapter } from '../../../../infra/criptography/bcrypt/bcrypt-adapter'
 import { UserRepository } from '../../../../infra/database/typeorm/repositories/user/user-repository'
 import { SignupBodyRequestValidation } from '../../../../validation/validators/signup/body-request-validation'

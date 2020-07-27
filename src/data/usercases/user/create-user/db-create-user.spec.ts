@@ -1,12 +1,12 @@
 import {
   CreateUser,
   CreateUserParams,
-} from '../../../domain/usercases/user/create-user'
+} from '../../../../domain/usercases/user/create-user'
 import { DbCreateUser } from './db-create-user'
-import { Hasher } from '../../protocols/encrypter'
-import { CreateUserRepository } from '../../protocols/create-user-repository'
-import { UserModel } from '../../../domain/models/user'
-import { LoadUserByEmailRepository } from '../../protocols/load-user-by-email-repository'
+import { Hasher } from '../../../protocols/encrypter'
+import { CreateUserRepository } from '../../../protocols/create-user-repository'
+import { UserModel } from '../../../../domain/models/user'
+import { LoadUserByEmailRepository } from '../../../protocols/load-user-by-email-repository'
 import faker from 'faker'
 
 class CreateUserRepositoryStub implements CreateUserRepository {
