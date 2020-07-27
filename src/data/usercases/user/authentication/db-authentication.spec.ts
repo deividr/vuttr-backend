@@ -109,4 +109,13 @@ describe('Database Authentication User', () => {
       userModel?.password,
     )
   })
+
+  test('should return throw if Hash compare return throws', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    jest.spyOn(hashComparerStub, 'compare').mockRejectedValueOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
