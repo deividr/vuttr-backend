@@ -16,6 +16,10 @@ interface SutTypes {
   encrypterStub: Encrypter
 }
 
+const throwError = (): void => {
+  throw new Error()
+}
+
 const mockAuthenticationParams = (): AuthenticationParams => ({
   email: faker.internet.email(),
   password: faker.internet.password(),
@@ -103,9 +107,7 @@ describe('Database Authentication User', () => {
     const { sut, loadUserByEmailRepositoryStub } = makeSut()
     jest
       .spyOn(loadUserByEmailRepositoryStub, 'loadUserByEmail')
-      .mockRejectedValueOnce(() => {
-        throw new Error()
-      })
+      .mockRejectedValueOnce(throwError)
     const promise = sut.auth(mockAuthenticationParams())
     await expect(promise).rejects.toThrow()
   })
@@ -126,9 +128,7 @@ describe('Database Authentication User', () => {
 
   test('should return throw if Hash compare return throws', async () => {
     const { sut, hashComparerStub } = makeSut()
-    jest.spyOn(hashComparerStub, 'compare').mockRejectedValueOnce(() => {
-      throw new Error()
-    })
+    jest.spyOn(hashComparerStub, 'compare').mockRejectedValueOnce(throwError)
     const promise = sut.auth(mockAuthenticationParams())
     await expect(promise).rejects.toThrow()
   })
@@ -141,5 +141,12 @@ describe('Database Authentication User', () => {
     )
     await sut.auth(mockAuthenticationParams())
     expect(encryptSpy).toHaveBeenCalledWith({ id: data?.id, name: data?.name })
+  })
+
+  test('should return throw if Encrypter throws', async () => {
+    const { sut, encrypterStub } = makeSut()
+    jest.spyOn(encrypterStub, 'encrypt').mockRejectedValueOnce(throwError)
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
   })
 })
