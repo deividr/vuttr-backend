@@ -3,7 +3,7 @@ import {
   Authentication,
   AuthenticationParams,
 } from '../../../../domain/usercases/user/authentication'
-import { LoadUserByEmailRepository } from '../../../protocols/load-user-by-email-repository'
+import { LoadUserByEmailRepository } from '../../../protocols/db/user/load-user-by-email-repository'
 import faker from 'faker'
 import { DbAuthentication } from './db-authentication'
 

@@ -6,7 +6,7 @@ import { DbCreateUser } from './db-create-user'
 import { Hasher } from '../../../protocols/cryptography/hasher'
 import { CreateUserRepository } from '../../../protocols/db/user/create-user-repository'
 import { UserModel } from '../../../../domain/models/user'
-import { LoadUserByEmailRepository } from '../../../protocols/load-user-by-email-repository'
+import { LoadUserByEmailRepository } from '../../../protocols/db/user/load-user-by-email-repository'
 import faker from 'faker'
 
 class CreateUserRepositoryStub implements CreateUserRepository {
