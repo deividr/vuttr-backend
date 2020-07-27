@@ -45,5 +45,13 @@ describe('User Repository Data Base', () => {
       )
       expect(result).toBeNull()
     })
+
+    test('should return User if email already exist', async () => {
+      const userRepository = new UserRepository()
+      const userParams = mockCreateUserParams()
+      const user = await userRepository.create(userParams)
+      const result = await userRepository.loadUserByEmail(userParams.email)
+      expect(result?.id).toEqual(user.id)
+    })
   })
 })
