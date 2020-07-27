@@ -149,4 +149,16 @@ describe('Database Authentication User', () => {
     const promise = sut.auth(mockAuthenticationParams())
     await expect(promise).rejects.toThrow()
   })
+
+  test('should return an AuthenticationModel on success', async () => {
+    const { sut, loadUserByEmailRepositoryStub, encrypterStub } = makeSut()
+    const data = await loadUserByEmailRepositoryStub.loadUserByEmail(
+      'any_email',
+    )
+    const authenticationModel = await sut.auth(mockAuthenticationParams())
+    expect(authenticationModel?.accessToken).toEqual(
+      await encrypterStub.encrypt(''),
+    )
+    expect(authenticationModel?.name).toEqual(data?.name)
+  })
 })
