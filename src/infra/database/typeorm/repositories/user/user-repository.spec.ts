@@ -2,6 +2,13 @@ import { UserRepository } from './user-repository'
 import { createConnection, getConnection, getRepository } from 'typeorm'
 import { User } from '../../entities/User'
 import faker from 'faker'
+import { CreateUserParams } from '../../../../../domain/usercases/user/create-user'
+
+const mockCreateUserParams = (): CreateUserParams => ({
+  name: faker.name.findName(),
+  email: faker.internet.email(),
+  password: faker.internet.password(),
+})
 
 describe('User Repository Data Base', () => {
   beforeAll(async () => {
@@ -16,11 +23,7 @@ describe('User Repository Data Base', () => {
     test('should return an UserModel when UserRepository return success', async () => {
       const userRepository = new UserRepository()
 
-      const createUserParams = {
-        name: faker.name.findName(),
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      }
+      const createUserParams = mockCreateUserParams()
 
       const user = await userRepository.create(createUserParams)
 
