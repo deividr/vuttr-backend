@@ -1,4 +1,4 @@
-import { Hasher } from '../../../data/protocols/encrypter'
+import { Hasher } from '../../../data/protocols/cryptography/hasher'
 import bcrypt from 'bcrypt'
 
 export class BcryptAdapter implements Hasher {

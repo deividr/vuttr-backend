@@ -3,7 +3,7 @@ import {
   CreateUserParams,
 } from '../../../../domain/usercases/user/create-user'
 import { DbCreateUser } from './db-create-user'
-import { Hasher } from '../../../protocols/encrypter'
+import { Hasher } from '../../../protocols/cryptography/hasher'
 import { CreateUserRepository } from '../../../protocols/create-user-repository'
 import { UserModel } from '../../../../domain/models/user'
 import { LoadUserByEmailRepository } from '../../../protocols/load-user-by-email-repository'

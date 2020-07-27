@@ -4,7 +4,7 @@ import {
 } from '../../../../domain/usercases/user/create-user'
 
 import { UserModel } from '../../../../domain/models/user'
-import { Hasher } from '../../../protocols/encrypter'
+import { Hasher } from '../../../protocols/cryptography/hasher'
 import { CreateUserRepository } from '../../../protocols/create-user-repository'
 import { LoadUserByEmailRepository } from '../../../protocols/load-user-by-email-repository'
 
