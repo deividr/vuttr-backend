@@ -5,7 +5,7 @@ import {
 
 import { UserModel } from '../../../../domain/models/user'
 import { Hasher } from '../../../protocols/cryptography/hasher'
-import { CreateUserRepository } from '../../../protocols/create-user-repository'
+import { CreateUserRepository } from '../../../protocols/db/user/create-user-repository'
 import { LoadUserByEmailRepository } from '../../../protocols/load-user-by-email-repository'
 
 export class DbCreateUser implements CreateUser {
