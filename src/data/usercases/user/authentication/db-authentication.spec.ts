@@ -55,12 +55,23 @@ describe('Database Authentication User', () => {
     expect(loadUserByEmailSpy).toHaveBeenCalledWith(authenticationParams.email)
   })
 
-  test('should return null if LoadUserByEmail return null', async () => {
+  test('should return null if LoadUserByEmailRepository return null', async () => {
     const { sut, loadUserByEmailRepositoryStub } = makeSut()
     jest
       .spyOn(loadUserByEmailRepositoryStub, 'loadUserByEmail')
       .mockResolvedValueOnce(null)
     const response = await sut.auth(mockAuthenticationParams())
     expect(response).toBeNull()
+  })
+
+  test('should throw if LoadUserByEmailRepository throws', async () => {
+    const { sut, loadUserByEmailRepositoryStub } = makeSut()
+    jest
+      .spyOn(loadUserByEmailRepositoryStub, 'loadUserByEmail')
+      .mockRejectedValueOnce(() => {
+        throw new Error()
+      })
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
   })
 })
