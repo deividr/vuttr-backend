@@ -17,10 +17,17 @@ const mockAuthenticationParams = (): AuthenticationParams => ({
   password: faker.internet.password(),
 })
 
+const mockUserModel = (): UserModel => ({
+  id: faker.random.uuid(),
+  name: faker.name.findName(),
+  email: faker.internet.email(),
+  password: faker.internet.password(),
+})
+
 const makeLoadUserByEmailRepository = (): LoadUserByEmailRepository => {
   class LoadUserByEmailRepositoryStub implements LoadUserByEmailRepository {
     async loadUserByEmail(email: string): Promise<UserModel | null> {
-      return null
+      return mockUserModel()
     }
   }
 
@@ -46,5 +53,14 @@ describe('Database Authentication User', () => {
     const authenticationParams = mockAuthenticationParams()
     await sut.auth(authenticationParams)
     expect(loadUserByEmailSpy).toHaveBeenCalledWith(authenticationParams.email)
+  })
+
+  test('should return null if LoadUserByEmail return null', async () => {
+    const { sut, loadUserByEmailRepositoryStub } = makeSut()
+    jest
+      .spyOn(loadUserByEmailRepositoryStub, 'loadUserByEmail')
+      .mockResolvedValueOnce(null)
+    const response = await sut.auth(mockAuthenticationParams())
+    expect(response).toBeNull()
   })
 })

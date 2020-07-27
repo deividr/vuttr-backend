@@ -13,9 +13,14 @@ export class DbAuthentication implements Authentication {
   async auth(
     authenticationParams: AuthenticationParams,
   ): Promise<AuthenticationModel | null> {
-    await this.loadUserByEmailRepository.loadUserByEmail(
+    const userModel = await this.loadUserByEmailRepository.loadUserByEmail(
       authenticationParams.email,
     )
-    return null
+
+    if (userModel) {
+      return { accessToken: 'any_token', name: 'any_name' }
+    } else {
+      return null
+    }
   }
 }
