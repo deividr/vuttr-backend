@@ -3,6 +3,7 @@ import { Controller } from '../../../../presentation/protocols/controller'
 import { DbCreateUser } from '../../../../data/usercases/user/create-user/db-create-user'
 import { BcryptAdapter } from '../../../../infra/criptography/bcrypt/bcrypt-adapter'
 import { UserRepository } from '../../../../infra/database/typeorm/repositories/user/user-repository'
+import { LogRepository } from '../../../../infra/database/typeorm/repositories/log/log-repository'
 import { SignupBodyRequestValidation } from '../../../../validation/validators/signup/body-request-validation'
 import { LogDecorator } from '../../../decorators/log-decorator'
 
@@ -16,5 +17,6 @@ export default (): Controller => {
   )
   const validation = new SignupBodyRequestValidation()
   const signupController = new SignUpController(dbCreateUser, validation)
-  return new LogDecorator(signupController)
+  const logRepository = new LogRepository()
+  return new LogDecorator(signupController, logRepository)
 }
