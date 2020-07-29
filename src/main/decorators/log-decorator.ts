@@ -1,5 +1,5 @@
-import { Controller } from '../../api/protocols/controller'
-import { HttpRequest, HttpResponse } from '../../api/protocols/http'
+import { Controller } from '../../presentation/protocols/controller'
+import { HttpRequest, HttpResponse } from '../../presentation/protocols/http'
 
 export class LogDecorator implements Controller {
   constructor(private readonly controller: Controller) {}
