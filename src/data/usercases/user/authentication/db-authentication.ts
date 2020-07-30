@@ -26,6 +26,7 @@ export class DbAuthentication implements Authentication {
         authenticationParams.password,
         userModel.password,
       )
+
       if (isEqual) {
         const accessToken = await this.encrypter.encrypt({
           id: userModel.id,
