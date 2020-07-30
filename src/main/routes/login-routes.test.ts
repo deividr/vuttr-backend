@@ -34,6 +34,15 @@ describe('Login Routes', () => {
         })
         .expect(200)
     })
+
+    test('should return 400 if no one param are provided', async () => {
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: faker.internet.email(),
+        })
+        .expect(400)
+    })
   })
 
   describe('POST /signup', () => {
@@ -50,7 +59,7 @@ describe('Login Routes', () => {
         .expect(201)
     })
 
-    test('should return 400 if no one param is provided', async () => {
+    test('should return 400 if no one param are provided', async () => {
       await request(app)
         .post('/api/signup')
         .send({
