@@ -24,7 +24,7 @@ const makeBody = (): any => {
 }
 
 describe('Signup Body Request Validations', () => {
-  test('should return throw MissingErrorParam when a field is not provided', () => {
+  test('should return throw InvalidParamError when a field is not provided', () => {
     const { sut } = makeSut()
 
     const { email, password, confirmPassword } = makeBody()
