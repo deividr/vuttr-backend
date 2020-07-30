@@ -4,7 +4,7 @@ import { LoginBodyRequestValidation } from '../../../../validation/validators/lo
 import { makeDbAuthentication } from '../../usercases/user/authentication/db-authentication-factory'
 import { makeLogControllerDecorator } from '../../decorators/log-decorator-factory'
 
-export default (): Controller => {
+export const makeLoginController = (): Controller => {
   const validation = new LoginBodyRequestValidation()
   const controller = new LoginController(validation, makeDbAuthentication())
   return makeLogControllerDecorator(controller)
