@@ -1,11 +1,13 @@
 {
   "name": "vuttr",
   "version": "1.1.0",
-  "main": "index.js",
+  "main": "server.js",
   "author": "Deivid Rodrigues <deivid.arodrigues@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "server:dev": "ts-node-dev --transpile-only --respawn --ignore-watch node_modules -r dotenv/config ./src/main/server.ts",
+    "start": "node ./dist/main/server.js",
+    "build": "rimraf dist && tsc",
+    "dev": "ts-node-dev --transpile-only --respawn --ignore-watch node_modules -r dotenv/config ./src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --setupFiles dotenv/config",
     "test:verbose": "jest --passWithNoTests --runInBand --setupFiles dotenv/config",
     "test:unit": "yarn test --watch -c jest-unit.config.js",
@@ -39,6 +41,7 @@
     "jest": "^26.0.1",
     "lint-staged": "10.2.11",
     "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.0",
     "ts-node-dev": "^1.0.0-pre.51",
