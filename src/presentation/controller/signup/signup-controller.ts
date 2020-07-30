@@ -26,15 +26,16 @@ export class SignUpController implements Controller {
 
       const body = await this.createUser.create({ name, email, password })
 
-      if (body) {
-        const authModel = await this.authentication.auth({
-          email: body.email,
-          password: body.password,
-        })
-        return created(authModel)
+      if (!body) {
+        return badRequest(new EmailAlreadyExistError())
       }
 
-      return badRequest(new EmailAlreadyExistError())
+      const authModel = await this.authentication.auth({
+        email: body.email,
+        password: body.password,
+      })
+
+      return created(authModel)
     } catch (error) {
       if (error instanceof InvalidParamError) {
         return badRequest(error)
