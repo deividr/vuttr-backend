@@ -5,9 +5,9 @@
   "author": "Deivid Rodrigues <deivid.arodrigues@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "server:dev": "ts-node-dev --transpile-only --respawn --ignore-watch node_modules ./src/main/server.ts",
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
-    "test:verbose": "jest --passWithNoTests --runInBand",
+    "server:dev": "ts-node-dev --transpile-only --respawn --ignore-watch node_modules -r dotenv/config ./src/main/server.ts",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --setupFiles dotenv/config",
+    "test:verbose": "jest --passWithNoTests --runInBand --setupFiles dotenv/config",
     "test:unit": "yarn test --watch -c jest-unit.config.js",
     "test:integration": "yarn test --watch -c jest-integration.config.js",
     "test:staged": "yarn test --findRelatedTests",
@@ -47,6 +47,7 @@
   "dependencies": {
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.2.1",

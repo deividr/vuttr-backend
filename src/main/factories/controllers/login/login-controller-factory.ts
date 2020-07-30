@@ -11,7 +11,7 @@ import { JwtAdapter } from '../../../../infra/criptography/jwt/jwt-adapter'
 export default (): Controller => {
   const loadUserByEmailRepository = new UserRepository()
   const bcryptAdapter = new BcryptAdapter()
-  const jwtAdapter = new JwtAdapter('secret')
+  const jwtAdapter = new JwtAdapter(process.env.JWT_SECRET as string)
   const dbAuthentication = new DbAuthentication(
     loadUserByEmailRepository,
     bcryptAdapter,
