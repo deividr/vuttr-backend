@@ -25,10 +25,6 @@ export class UserRepository
       .where('users.email = :email', { email })
       .getOne()
 
-    if (user) {
-      return user
-    } else {
-      return null
-    }
+    return user ?? null
   }
 }
