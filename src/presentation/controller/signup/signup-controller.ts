@@ -9,11 +9,13 @@ import {
 import { Validation } from '../../protocols/validation'
 import { EmailAlreadyExistError } from '../../errors/email-already-exist-error'
 import { InvalidParamError } from '../../errors/invalid-param-error'
+import { Authentication } from '../../../domain/usercases/user/authentication'
 
 export class SignUpController implements Controller {
   constructor(
     private readonly createUser: CreateUser,
     private readonly validation: Validation,
+    private readonly authentication: Authentication,
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -25,10 +27,14 @@ export class SignUpController implements Controller {
       const body = await this.createUser.create({ name, email, password })
 
       if (body) {
-        return created(body)
-      } else {
-        return badRequest(new EmailAlreadyExistError())
+        const authModel = await this.authentication.auth({
+          email: body.email,
+          password: body.password,
+        })
+        return created(authModel)
       }
+
+      return badRequest(new EmailAlreadyExistError())
     } catch (error) {
       if (error instanceof InvalidParamError) {
         return badRequest(error)

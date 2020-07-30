@@ -6,6 +6,8 @@ import { UserRepository } from '../../../../infra/database/typeorm/repositories/
 import { LogRepository } from '../../../../infra/database/typeorm/repositories/log/log-repository'
 import { SignupBodyRequestValidation } from '../../../../validation/validators/signup/body-request-validation'
 import { LogDecorator } from '../../../decorators/log-decorator'
+import { DbAuthentication } from '../../../../data/usercases/user/authentication/db-authentication'
+import { JwtAdapter } from '../../../../infra/criptography/jwt/jwt-adapter'
 
 export default (): Controller => {
   const encrypter = new BcryptAdapter()
@@ -16,7 +18,19 @@ export default (): Controller => {
     createUserRepository,
   )
   const validation = new SignupBodyRequestValidation()
-  const signupController = new SignUpController(dbCreateUser, validation)
+  const loadUserByEmailRepository = new UserRepository()
+  const bcryptAdapter = new BcryptAdapter()
+  const jwtAdapter = new JwtAdapter(process.env.JWT_SECRET as string)
+  const dbAuthentication = new DbAuthentication(
+    loadUserByEmailRepository,
+    bcryptAdapter,
+    jwtAdapter,
+  )
+  const signupController = new SignUpController(
+    dbCreateUser,
+    validation,
+    dbAuthentication,
+  )
   const logRepository = new LogRepository()
   return new LogDecorator(signupController, logRepository)
 }

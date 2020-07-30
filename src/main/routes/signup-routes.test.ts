@@ -1,5 +1,4 @@
-import { createConnection, getConnection, getRepository } from 'typeorm'
-import { User } from '../../infra/database/typeorm/entities/User'
+import { createConnection, getConnection } from 'typeorm'
 import app from '../config/app'
 import request from 'supertest'
 import faker from 'faker'
@@ -24,9 +23,6 @@ describe('SignUp Routes', () => {
         confirmPassword: password,
       })
       .expect(201)
-      .then(async (response) => {
-        await getRepository(User).delete(response.body.id)
-      })
   })
 
   test('should return 400 if no one param is provided', async () => {
