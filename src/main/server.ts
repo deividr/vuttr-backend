@@ -3,8 +3,8 @@ import { createConnection } from 'typeorm'
 
 createConnection()
   .then((connection) => {
-    app.listen(3000, () => {
-      console.log('Server is running in http://localhost:3000...')
+    app.listen(process.env.PORT, () => {
+      console.log('Server is running in port', process.env.PORT)
     })
   })
   .catch((error) => {
