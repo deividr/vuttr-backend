@@ -31,8 +31,8 @@ export class SignUpController implements Controller {
       }
 
       const authModel = await this.authentication.auth({
-        email: body.email,
-        password: body.password,
+        email: email,
+        password: password,
       })
 
       return created(authModel)
