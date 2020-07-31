@@ -57,5 +57,8 @@
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.25",
     "yup": "^0.29.1"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
