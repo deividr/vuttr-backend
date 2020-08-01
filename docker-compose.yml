@@ -1,0 +1,22 @@
+version: "3"
+services:
+  postgres:
+    container_name: postgres-container
+    image: postgres:12.3
+    restart: always
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  api:
+    container_name: api-container
+    build: .
+    image: vuttr-container
+    restart: always
+    command: yarn start
+    volumes:
+      - "./dist:/usr/src/vuttr-backend/dist"
+    posts:
+      - "5050:5050"
+    links:
+      - postgres
