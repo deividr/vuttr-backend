@@ -8,6 +8,8 @@
     "start": "node ./dist/main/server.js",
     "build": "rimraf dist && tsc",
     "dev": "ts-node-dev --transpile-only --respawn --ignore-watch node_modules -r dotenv/config ./src/main/server.ts",
+    "up": "yarn build && docker-compose up -d",
+    "down": "docker-compose down",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --setupFiles dotenv/config",
     "test:verbose": "jest --passWithNoTests --runInBand --setupFiles dotenv/config",
     "test:unit": "yarn test --watch -c jest-unit.config.js",
