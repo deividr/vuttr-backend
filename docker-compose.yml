@@ -4,12 +4,12 @@ services:
     container_name: postgres-container
     image: postgres:12.3
     environment:
-      POSTGRES_PASSWORD: "lu1312enzo"
+      POSTGRES_PASSWORD: lu1312enzo
     restart: always
     volumes:
       - ./data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - 5432:5432
   api:
     container_name: api-container
     build: .
@@ -17,13 +17,13 @@ services:
     restart: always
     command: yarn start
     volumes:
-      - "./dist:/usr/src/vuttr-backend/dist"
+      - ./dist:/usr/src/vuttr-backend/dist
     env_file:
       - .env
     environment:
-      TYPEORM_URL: "postgres://postgres:lu1312enzo@postgres:5432/vuttr"
-      TYPEORM_ENTITIES: ./dist/infra/database/typeorm/entities
+      TYPEORM_URL: postgres://postgres:lu1312enzo@postgres:5432/vuttr
+      TYPEORM_ENTITIES: ./dist/infra/database/typeorm/entities/*.js
     ports:
-      - "3000:5050"
+      - 5050:5050
     links:
       - postgres
