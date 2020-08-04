@@ -14,15 +14,15 @@ services:
     container_name: api-container
     image: node:14
     working_dir: /usr/src/vuttr-backend
+    command: bash -c "yarn install --prod && yarn debug"
     volumes:
+      - ./dist/:/usr/src/vuttr-backend/dist/
       - ./package.json:/usr/src/vuttr-backend/package.json
-      - ./dist:/usr/src/vuttr-backend/dist
     env_file:
       - .env
     environment:
       TYPEORM_URL: postgres://postgres:lu1312enzo@postgres:5432/vuttr
       TYPEORM_ENTITIES: ./dist/infra/database/typeorm/entities/*.js
-    command: sh -c "yarn install --prod && yarn debug"
     restart: always
     ports:
       - 5050:5050
