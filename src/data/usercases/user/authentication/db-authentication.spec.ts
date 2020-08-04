@@ -126,6 +126,15 @@ describe('Database Authentication User', () => {
     )
   })
 
+  test('should return null if Hasher compare fail', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    jest
+      .spyOn(hashComparerStub, 'compare')
+      .mockReturnValueOnce(Promise.resolve(false))
+    const response = await sut.auth(mockAuthenticationParams())
+    expect(response).toBeNull()
+  })
+
   test('should return throw if Hash compare return throws', async () => {
     const { sut, hashComparerStub } = makeSut()
     jest.spyOn(hashComparerStub, 'compare').mockRejectedValueOnce(throwError)
