@@ -12,7 +12,7 @@ import faker from 'faker'
 interface SutTypes {
   sut: Authentication
   loadUserByEmailRepositoryStub: LoadUserByEmailRepository
-  hashComparerStub: HashComparer
+  hashCompareStub: HashComparer
   encrypterStub: Encrypter
 }
 
@@ -67,17 +67,17 @@ const makeEncrypter = (): Encrypter => {
 
 const makeSut = (): SutTypes => {
   const loadUserByEmailRepositoryStub = makeLoadUserByEmailRepository()
-  const hashComparerStub = makeHashComparer()
+  const hashCompareStub = makeHashComparer()
   const encrypterStub = makeEncrypter()
   const sut = new DbAuthentication(
     loadUserByEmailRepositoryStub,
-    hashComparerStub,
+    hashCompareStub,
     encrypterStub,
   )
   return {
     sut,
     loadUserByEmailRepositoryStub,
-    hashComparerStub,
+    hashCompareStub: hashCompareStub,
     encrypterStub,
   }
 }
@@ -113,8 +113,8 @@ describe('Database Authentication User', () => {
   })
 
   test('should call Hasher compare method with correct values', async () => {
-    const { sut, loadUserByEmailRepositoryStub, hashComparerStub } = makeSut()
-    const compareSpy = jest.spyOn(hashComparerStub, 'compare')
+    const { sut, loadUserByEmailRepositoryStub, hashCompareStub } = makeSut()
+    const compareSpy = jest.spyOn(hashCompareStub, 'compare')
     const authenticationParams = mockAuthenticationParams()
     const userModel = await loadUserByEmailRepositoryStub.loadUserByEmail(
       'any_email',
@@ -127,17 +127,17 @@ describe('Database Authentication User', () => {
   })
 
   test('should return null if Hasher compare fail', async () => {
-    const { sut, hashComparerStub } = makeSut()
+    const { sut, hashCompareStub } = makeSut()
     jest
-      .spyOn(hashComparerStub, 'compare')
+      .spyOn(hashCompareStub, 'compare')
       .mockReturnValueOnce(Promise.resolve(false))
     const response = await sut.auth(mockAuthenticationParams())
     expect(response).toBeNull()
   })
 
   test('should return throw if Hash compare return throws', async () => {
-    const { sut, hashComparerStub } = makeSut()
-    jest.spyOn(hashComparerStub, 'compare').mockRejectedValueOnce(throwError)
+    const { sut, hashCompareStub } = makeSut()
+    jest.spyOn(hashCompareStub, 'compare').mockRejectedValueOnce(throwError)
     const promise = sut.auth(mockAuthenticationParams())
     await expect(promise).rejects.toThrow()
   })
