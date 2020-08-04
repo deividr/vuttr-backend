@@ -18,7 +18,8 @@
     "test:staged": "yarn test --findRelatedTests",
     "test:ci": "yarn test --coverage",
     "test:coveralls": "yarn test:ci && coveralls < coverage/lcov.info",
-    "typeorm": "ts-node node_modules/typeorm/cli.js"
+    "typeorm": "ts-node node_modules/typeorm/cli.js",
+    "run:migrations": "yarn typeorm migration:run"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
