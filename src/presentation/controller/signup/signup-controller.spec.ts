@@ -2,7 +2,7 @@ import { SignUpController } from './signup-controller'
 import {
   CreateUser,
   CreateUserParams,
-} from '../../../domain/usercases/user/create-user'
+} from '$/domain/usercases/user/create-user'
 import { UserModel } from '../../../domain/models/user'
 import { Validation } from '../../protocols/validation'
 import { Controller } from '../../protocols/controller'
@@ -17,7 +17,7 @@ import {
 import {
   Authentication,
   AuthenticationParams,
-} from '../../../domain/usercases/user/authentication'
+} from '$/domain/usercases/user/authentication'
 import { AuthenticationModel } from '../../../domain/models/authentication'
 import faker from 'faker'
 

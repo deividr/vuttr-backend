@@ -1185,6 +1185,11 @@ bcrypt@^5.0.0:
     node-addon-api "^3.0.0"
     node-pre-gyp "0.15.0"
 
+better-module-alias@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/better-module-alias/-/better-module-alias-1.1.0.tgz#b53896d097f134a3bf7007bc4973ce784fa4b033"
+  integrity sha512-od5JQZuQtzEugoIvPME2ZaU58IceQM0nBVs0sUE8kGFPeiDRMHej2TvQzlPA9lHtTYdAcXmvsRTME8Ggrx8p/w==
+
 binary-extensions@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.1.0.tgz#30fa40c9e7fe07dbc895678cd287024dea241dd9"

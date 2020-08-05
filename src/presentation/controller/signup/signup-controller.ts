@@ -1,15 +1,15 @@
-import { Controller } from '../../protocols/controller'
-import { HttpRequest, HttpResponse } from '../../protocols/http'
-import { CreateUser } from '../../../domain/usercases/user/create-user'
+import { Controller } from '$/presentation/protocols/controller'
+import { HttpRequest, HttpResponse } from '$/presentation/protocols/http'
+import { CreateUser } from '$/domain/usercases/user/create-user'
 import {
   badRequest,
   created,
   serverError,
-} from '../../helpers/http/http-helpers'
-import { Validation } from '../../protocols/validation'
-import { EmailAlreadyExistError } from '../../errors/email-already-exist-error'
-import { InvalidParamError } from '../../errors/invalid-param-error'
-import { Authentication } from '../../../domain/usercases/user/authentication'
+} from '$/presentation/helpers/http/http-helpers'
+import { Validation } from '$/presentation/protocols/validation'
+import { EmailAlreadyExistError } from '$/presentation/errors/email-already-exist-error'
+import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
+import { Authentication } from '$/domain/usercases/user/authentication'
 
 export class SignUpController implements Controller {
   constructor(

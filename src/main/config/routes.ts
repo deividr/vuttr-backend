@@ -3,14 +3,18 @@ import path from 'path'
 import { readdirSync } from 'fs'
 
 export default (app: Express): void => {
-  const routes = Router()
+  try {
+    const routes = Router()
 
-  app.use('/api', routes)
+    app.use('/api', routes)
 
-  const filesRoutes = readdirSync(path.resolve(__dirname, '../routes/'))
+    const filesRoutes = readdirSync(path.resolve(__dirname, '../routes/'))
 
-  filesRoutes.map(async (fileRoute) => {
-    !fileRoute.includes('.test.') &&
-      (await import(`../routes/${fileRoute}`)).default(routes)
-  })
+    filesRoutes.map(async (fileRoute) => {
+      !fileRoute.includes('.test.') &&
+        (await import(`../routes/${fileRoute}`)).default(routes)
+    })
+  } catch (error) {
+    console.log('Deu erro, esse aqui =', error)
+  }
 }

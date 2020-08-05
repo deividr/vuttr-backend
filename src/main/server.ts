@@ -1,3 +1,4 @@
+import './config/better-module-alias'
 import app from './config/app'
 import { createConnection } from 'typeorm'
 
