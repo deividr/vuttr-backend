@@ -1,14 +1,18 @@
-import { Controller } from '../../protocols/controller'
+import { Controller } from '$/presentation/protocols/controller'
 import { LoginController } from './login-controller'
-import { HttpRequest } from '../../protocols/http'
-import { Validation } from '../../protocols/validation'
-import { InvalidParamError } from '../../errors/invalid-param-error'
+import { HttpRequest } from '$/presentation/protocols/http'
+import { Validation } from '$/presentation/protocols/validation'
+import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
 import {
   Authentication,
   AuthenticationParams,
-} from '../../../domain/usercases/user/authentication'
-import { AuthenticationModel } from '../../../domain/models/authentication'
-import { unauthorized, ok, serverError } from '../../helpers/http/http-helpers'
+} from '$/presentation/../domain/usercases/user/authentication'
+import { AuthenticationModel } from '$/presentation/../domain/models/authentication'
+import {
+  unauthorized,
+  ok,
+  serverError,
+} from '$/presentation/helpers/http/http-helpers'
 import faker from 'faker'
 
 interface SutTypes {

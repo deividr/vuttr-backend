@@ -1,14 +1,14 @@
-import { HttpRequest, HttpResponse } from '../../protocols/http'
-import { Controller } from '../../protocols/controller'
+import { HttpRequest, HttpResponse } from '$/presentation/protocols/http'
+import { Controller } from '$/presentation/protocols/controller'
 import {
   ok,
   unauthorized,
   badRequest,
   serverError,
-} from '../../helpers/http/http-helpers'
-import { Validation } from '../../protocols/validation'
-import { Authentication } from '../../../domain/usercases/user/authentication'
-import { InvalidParamError } from '../../errors/invalid-param-error'
+} from '$/presentation/helpers/http/http-helpers'
+import { Validation } from '$/presentation/protocols/validation'
+import { Authentication } from '$/presentation/../domain/usercases/user/authentication'
+import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
 
 export class LoginController implements Controller {
   constructor(
