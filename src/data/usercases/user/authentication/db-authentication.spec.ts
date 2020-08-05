@@ -1,12 +1,12 @@
-import { UserModel } from '../../../../domain/models/user'
+import { UserModel } from '$/domain/models/user'
 import {
   Authentication,
   AuthenticationParams,
-} from '../../../../domain/usercases/user/authentication'
-import { LoadUserByEmailRepository } from '../../../protocols/db/user/load-user-by-email-repository'
+} from '$/domain/usercases/user/authentication'
+import { LoadUserByEmailRepository } from '$/data/protocols/db/user/load-user-by-email-repository'
 import { DbAuthentication } from './db-authentication'
-import { HashComparer } from '../../../protocols/cryptography/hash-comparer'
-import { Encrypter } from '../../../protocols/cryptography/encrypter'
+import { HashComparer } from '$/data/protocols/cryptography/hash-comparer'
+import { Encrypter } from '$/data/protocols/cryptography/encrypter'
 import faker from 'faker'
 
 interface SutTypes {

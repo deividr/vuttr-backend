@@ -1,11 +1,11 @@
-import { AuthenticationModel } from '../../../../domain/models/authentication'
+import { AuthenticationModel } from '$/domain/models/authentication'
 import {
   Authentication,
   AuthenticationParams,
-} from '../../../../domain/usercases/user/authentication'
-import { Encrypter } from '../../../protocols/cryptography/encrypter'
-import { HashComparer } from '../../../protocols/cryptography/hash-comparer'
-import { LoadUserByEmailRepository } from '../../../protocols/db/user/load-user-by-email-repository'
+} from '$/domain/usercases/user/authentication'
+import { Encrypter } from '$/data/protocols/cryptography/encrypter'
+import { HashComparer } from '$/data/protocols/cryptography/hash-comparer'
+import { LoadUserByEmailRepository } from '$/data/protocols/db/user/load-user-by-email-repository'
 
 export class DbAuthentication implements Authentication {
   constructor(
