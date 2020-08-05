@@ -1,9 +1,9 @@
-import { CreateUserRepository } from '../../../../../data/protocols/db/user/create-user-repository'
-import { CreateUserParams } from '../../../../../domain/usercases/user/create-user'
-import { UserModel } from '../../../../../domain/models/user'
-import { User } from '../../entities/User'
+import { CreateUserRepository } from '$/data/protocols/db/user/create-user-repository'
+import { CreateUserParams } from '$/domain/usercases/user/create-user'
+import { UserModel } from '$/domain/models/user'
+import { User } from '$/infra/database/typeorm/entities/User'
 import { getRepository } from 'typeorm'
-import { LoadUserByEmailRepository } from '../../../../../data/protocols/db/user/load-user-by-email-repository'
+import { LoadUserByEmailRepository } from '$/data/protocols/db/user/load-user-by-email-repository'
 
 export class UserRepository
   implements CreateUserRepository, LoadUserByEmailRepository {

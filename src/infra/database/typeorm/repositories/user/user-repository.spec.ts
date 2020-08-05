@@ -1,8 +1,8 @@
 import { UserRepository } from './user-repository'
 import { createConnection, getConnection, getRepository } from 'typeorm'
-import { User } from '../../entities/User'
+import { User } from '$/infra/database/typeorm/entities/User'
 import faker from 'faker'
-import { CreateUserParams } from '../../../../../domain/usercases/user/create-user'
+import { CreateUserParams } from '$/domain/usercases/user/create-user'
 
 const mockCreateUserParams = (): CreateUserParams => ({
   name: faker.name.findName(),
