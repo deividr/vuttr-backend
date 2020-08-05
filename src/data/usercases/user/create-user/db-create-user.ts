@@ -1,12 +1,12 @@
 import {
   CreateUser,
   CreateUserParams,
-} from '../../../../domain/usercases/user/create-user'
+} from '$/domain/usercases/user/create-user'
 
-import { UserModel } from '../../../../domain/models/user'
-import { Hasher } from '../../../protocols/cryptography/hasher'
-import { CreateUserRepository } from '../../../protocols/db/user/create-user-repository'
-import { LoadUserByEmailRepository } from '../../../protocols/db/user/load-user-by-email-repository'
+import { UserModel } from '$/domain/models/user'
+import { Hasher } from '$/data/protocols/cryptography/hasher'
+import { CreateUserRepository } from '$/data/protocols/db/user/create-user-repository'
+import { LoadUserByEmailRepository } from '$/data/protocols/db/user/load-user-by-email-repository'
 
 export class DbCreateUser implements CreateUser {
   constructor(
