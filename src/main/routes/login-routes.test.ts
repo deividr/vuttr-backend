@@ -1,5 +1,5 @@
 import { createConnection, getConnection, getRepository } from 'typeorm'
-import { User } from '../../infra/database/typeorm/entities/User'
+import { User } from '$/infra/database/typeorm/entities/User'
 import { hash } from 'bcrypt'
 import app from '../config/app'
 import faker from 'faker'

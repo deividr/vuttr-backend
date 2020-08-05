@@ -1,8 +1,8 @@
-import { LogErrorRepository } from '../../data/protocols/db/log/log-error-repository'
-import { Controller } from '../../presentation/protocols/controller'
-import { HttpRequest, HttpResponse } from '../../presentation/protocols/http'
+import { LogErrorRepository } from '$/data/protocols/db/log/log-error-repository'
+import { Controller } from '$/presentation/protocols/controller'
+import { HttpRequest, HttpResponse } from '$/presentation/protocols/http'
 import { LogDecorator } from './log-decorator'
-import { ok, serverError } from '../../presentation/helpers/http/http-helpers'
+import { ok, serverError } from '$/presentation/helpers/http/http-helpers'
 import faker from 'faker'
 
 interface SutTypes {

@@ -1,6 +1,6 @@
-import { LogRepository } from '../../../infra/database/typeorm/repositories/log/log-repository'
-import { Controller } from '../../../presentation/protocols/controller'
-import { LogDecorator } from '../../decorators/log-decorator'
+import { LogRepository } from '$/infra/database/typeorm/repositories/log/log-repository'
+import { Controller } from '$/presentation/protocols/controller'
+import { LogDecorator } from '$/main/decorators/log-decorator'
 
 export const makeLogControllerDecorator = (
   controller: Controller,
