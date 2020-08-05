@@ -1,4 +1,4 @@
-import { InvalidParamError } from '../../../presentation/errors/invalid-param-error'
+import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
 import { LoginBodyRequestValidation } from './login-body-request-validation'
 import faker from 'faker'
 

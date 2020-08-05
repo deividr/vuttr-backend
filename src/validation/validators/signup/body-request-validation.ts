@@ -1,6 +1,6 @@
-import { Validation } from '../../../presentation/protocols/validation'
-import { CreateUserParams } from '../../../domain/usercases/user/create-user'
-import { InvalidParamError } from '../../../presentation/errors/invalid-param-error'
+import { Validation } from '$/presentation/protocols/validation'
+import { CreateUserParams } from '$/domain/usercases/user/create-user'
+import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
 import * as Yup from 'yup'
 
 export class SignupBodyRequestValidation implements Validation {
