@@ -3,22 +3,22 @@ import {
   CreateUser,
   CreateUserParams,
 } from '$/domain/usercases/user/create-user'
-import { UserModel } from '../../../domain/models/user'
-import { Validation } from '../../protocols/validation'
-import { Controller } from '../../protocols/controller'
-import { InvalidParamError } from '../../errors/invalid-param-error'
-import { EmailAlreadyExistError } from '../../errors/email-already-exist-error'
-import { HttpRequest } from '../../protocols/http'
+import { UserModel } from '$/domain/models/user'
+import { Validation } from '$/presentation/protocols/validation'
+import { Controller } from '$/presentation/protocols/controller'
+import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
+import { EmailAlreadyExistError } from '$/presentation/errors/email-already-exist-error'
+import { HttpRequest } from '$/presentation/protocols/http'
 import {
   badRequest,
   created,
   serverError,
-} from '../../helpers/http/http-helpers'
+} from '$/presentation/helpers/http/http-helpers'
 import {
   Authentication,
   AuthenticationParams,
 } from '$/domain/usercases/user/authentication'
-import { AuthenticationModel } from '../../../domain/models/authentication'
+import { AuthenticationModel } from '$/domain/models/authentication'
 import faker from 'faker'
 
 interface SutTypes {
