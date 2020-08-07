@@ -8,11 +8,11 @@ export const signupPath = {
       content: {
         'application/json': {
           schema: {
-            $ref: '#components/schemas/userParams',
+            $ref: '#/components/schemas/userParams',
           },
           examples: {
             userParams: {
-              $ref: '#components/examples/userParams',
+              $ref: '#/components/examples/userParams',
             },
           },
         },
@@ -25,6 +25,26 @@ export const signupPath = {
           'application/json': {
             schema: {
               $ref: '#/components/schemas/login',
+            },
+          },
+        },
+      },
+      '400': {
+        description: 'Bad request',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/error',
+            },
+          },
+        },
+      },
+      '500': {
+        description: 'Server error',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/error',
             },
           },
         },
