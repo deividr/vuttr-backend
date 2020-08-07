@@ -25,7 +25,7 @@ services:
       TYPEORM_ENTITIES: ./dist/infra/database/typeorm/entities/*.js
     restart: always
     ports:
-      - 5050:5050
+      - 3000:3000
       - 9222:9222
     links:
       - postgres
