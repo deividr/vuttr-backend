@@ -14,7 +14,7 @@ services:
     container_name: api-container
     image: node:14
     working_dir: /usr/src/vuttr-backend
-    command: bash -c "yarn install --prod && yarn debug"
+    command: yarn docker:commands
     volumes:
       - ./dist/:/usr/src/vuttr-backend/dist/
       - ./package.json:/usr/src/vuttr-backend/package.json
