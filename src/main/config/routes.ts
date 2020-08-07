@@ -12,6 +12,7 @@ export default (app: Express): void => {
 
     filesRoutes.map(async (fileRoute) => {
       !fileRoute.includes('.test.') &&
+        !fileRoute.includes('.map') &&
         (await import(`../routes/${fileRoute}`)).default(routes)
     })
   } catch (error) {
