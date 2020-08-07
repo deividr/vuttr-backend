@@ -1,3 +1,7 @@
+import paths from './paths'
+import schemas from './schemas'
+import examples from './examples'
+
 export default {
   openapi: '3.0.0',
   info: {
@@ -11,4 +15,14 @@ export default {
       url: '/api',
     },
   ],
+  tags: [
+    {
+      name: 'Login',
+    },
+  ],
+  paths,
+  components: {
+    schemas,
+    examples,
+  },
 }
