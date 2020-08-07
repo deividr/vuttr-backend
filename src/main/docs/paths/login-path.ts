@@ -1,26 +1,26 @@
-export const signupPath = {
+export const loginPath = {
   post: {
     tags: ['Login'],
-    summary: 'Create new user access',
-    description: 'Create a new user to access system and operate other routes.',
+    summary: 'Login user',
+    description: 'Validate email and password for login.',
     requestBody: {
       required: true,
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/userParams',
+            $ref: '#/components/schemas/loginParams',
           },
           examples: {
             userParams: {
-              $ref: '#/components/examples/userParams',
+              $ref: '#/components/examples/loginParams',
             },
           },
         },
       },
     },
     responses: {
-      '201': {
-        description: 'User create success',
+      '200': {
+        description: 'Success',
         content: {
           'application/json': {
             schema: {
@@ -31,6 +31,16 @@ export const signupPath = {
       },
       '400': {
         description: 'Bad request',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/error',
+            },
+          },
+        },
+      },
+      '401': {
+        description: 'Unauthorized',
         content: {
           'application/json': {
             schema: {
