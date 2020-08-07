@@ -1,9 +1,12 @@
 import express, { json } from 'express'
 import cors from 'cors'
+import setupSwagger from './swagger'
 import setupRoutes from './routes'
 
 const app = express()
 const bodyParser = json()
+
+setupSwagger(app)
 
 app.use(cors())
 
