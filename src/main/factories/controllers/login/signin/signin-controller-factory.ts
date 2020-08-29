@@ -1,6 +1,6 @@
 import { SigninController } from '$/presentation/controller/login/signin/signin-controller'
 import { Controller } from '$/presentation/protocols/controller'
-import { SigninBodyRequestValidation } from '$/validation/validators/login/signin-body-request-validation'
+import { SigninBodyRequestValidation } from '$/validation/validators/login/signin/signin-body-request-validation'
 import { makeDbAuthentication } from '$/main/factories/usercases/user/authentication/db-authentication-factory'
 import { makeLogControllerDecorator } from '$/main/factories/decorators/log-decorator-factory'
 
