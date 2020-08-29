@@ -10,7 +10,7 @@ import { Validation } from '$/presentation/protocols/validation'
 import { Authentication } from '$/presentation/../domain/usercases/user/authentication'
 import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
 
-export class LoginController implements Controller {
+export class SigninController implements Controller {
   constructor(
     private readonly validation: Validation,
     private readonly authentication: Authentication,

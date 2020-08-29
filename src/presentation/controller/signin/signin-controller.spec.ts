@@ -1,5 +1,5 @@
 import { Controller } from '$/presentation/protocols/controller'
-import { LoginController } from './login-controller'
+import { SigninController } from './signin-controller'
 import { HttpRequest } from '$/presentation/protocols/http'
 import { Validation } from '$/presentation/protocols/validation'
 import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
@@ -24,7 +24,7 @@ interface SutTypes {
 const makeSut = (): SutTypes => {
   const validationStub = makeValidation()
   const authenticationStub = new AuthenticationStub()
-  const sut = new LoginController(validationStub, authenticationStub)
+  const sut = new SigninController(validationStub, authenticationStub)
   return {
     sut,
     validationStub,
