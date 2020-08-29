@@ -1,4 +1,4 @@
-import { SignUpController } from '$/presentation/controller/signup/signup-controller'
+import { SignUpController } from '$/presentation/controller/login/signup/signup-controller'
 import { Controller } from '$/presentation/protocols/controller'
 import { SignupBodyRequestValidation } from '$/validation/validators/signup/body-request-validation'
 import { makeLogControllerDecorator } from '$/main/factories/decorators/log-decorator-factory'

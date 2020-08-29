@@ -1,4 +1,4 @@
-import { SigninController } from '$/presentation/controller/signin/signin-controller'
+import { SigninController } from '$/presentation/controller/login/signin/signin-controller'
 import { Controller } from '$/presentation/protocols/controller'
 import { LoginBodyRequestValidation } from '$/validation/validators/login/login-body-request-validation'
 import { makeDbAuthentication } from '$/main/factories/usercases/user/authentication/db-authentication-factory'
