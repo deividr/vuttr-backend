@@ -2,7 +2,7 @@ import { Validation } from '$/presentation/protocols/validation'
 import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
 import * as Yup from 'yup'
 
-export class LoginBodyRequestValidation implements Validation {
+export class SigninBodyRequestValidation implements Validation {
   validate(body: any): void {
     const schema = Yup.object().shape({
       email: Yup.string().email().required(),
