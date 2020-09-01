@@ -1,3 +1,5 @@
+import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
+import { badRequest } from '$/presentation/helpers/http/http-helpers'
 import { Controller } from '$/presentation/protocols/controller'
 import { HttpRequest } from '$/presentation/protocols/http'
 import { Validation } from '$/presentation/protocols/validation'
@@ -51,5 +53,18 @@ describe('CreateTools Controller', () => {
     const httpRequest = mockHttpRequest()
     await sut.handle(httpRequest)
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('should return 400 if Validation return an error', async () => {
+    const { sut, validationStub } = makeSut()
+    const error = new InvalidParamError('link is missing')
+
+    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
+      throw error
+    })
+
+    const httpRequest = mockHttpRequest()
+    const response = await sut.handle(httpRequest)
+    expect(response).toEqual(badRequest(error))
   })
 })
