@@ -1,5 +1,5 @@
 import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
-import { badRequest } from '$/presentation/helpers/http/http-helpers'
+import { badRequest, ok } from '$/presentation/helpers/http/http-helpers'
 import { Controller } from '$/presentation/protocols/controller'
 import { HttpRequest } from '$/presentation/protocols/http'
 import { Validation } from '$/presentation/protocols/validation'
@@ -15,7 +15,7 @@ import faker from 'faker'
 interface SutTypes {
   sut: Controller
   validationStub: Validation
-  createToolsStub: CreateTools
+  createToolsStub: CreateToolsStub
 }
 
 const mockHttpRequest = (): HttpRequest => {
@@ -43,33 +43,22 @@ const makeValidationStub = (): Validation => {
 
   return new ValidationStub()
 }
+class CreateToolsStub implements CreateTools {
+  toolsModel: ToolsModel
 
-const makeCreateToolsStub = (): CreateTools => {
-  class CreateToolsStub implements CreateTools {
-    async create(param: CreateToolsParam): Promise<ToolsModel> {
-      return await Promise.resolve({
-        id: faker.random.uuid(),
-        title: 'Notion',
-        link: 'https://notion.so',
-        description:
-          'All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. ',
-        tags: [
-          'organization',
-          'planning',
-          'collaboration',
-          'writing',
-          'calendar',
-        ],
-      })
+  async create(param: CreateToolsParam): Promise<ToolsModel> {
+    this.toolsModel = {
+      id: faker.random.uuid(),
+      ...param,
     }
-  }
 
-  return new CreateToolsStub()
+    return this.toolsModel
+  }
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = makeValidationStub()
-  const createToolsStub = makeCreateToolsStub()
+  const createToolsStub = new CreateToolsStub()
   const sut = new CreateToolsController(validationStub, createToolsStub)
 
   return {
@@ -107,5 +96,11 @@ describe('CreateTools Controller', () => {
     const httpRequest = mockHttpRequest()
     await sut.handle(httpRequest)
     expect(createSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('should return 200 if valid params are provided ', async () => {
+    const { sut, createToolsStub } = makeSut()
+    const httpResponse = await sut.handle(mockHttpRequest())
+    expect(httpResponse).toEqual(ok(createToolsStub.toolsModel))
   })
 })
