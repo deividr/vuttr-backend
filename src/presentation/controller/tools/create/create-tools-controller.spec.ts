@@ -4,10 +4,18 @@ import { Controller } from '$/presentation/protocols/controller'
 import { HttpRequest } from '$/presentation/protocols/http'
 import { Validation } from '$/presentation/protocols/validation'
 import { CreateToolsController } from './create-tools-controller'
+import {
+  CreateTools,
+  CreateToolsParam,
+} from '$/domain/usercases/tools/create-tools'
+import { ToolsModel } from '$/domain/models/tools'
+
+import faker from 'faker'
 
 interface SutTypes {
   sut: Controller
   validationStub: Validation
+  createToolsStub: CreateTools
 }
 
 const mockHttpRequest = (): HttpRequest => {
@@ -36,13 +44,38 @@ const makeValidationStub = (): Validation => {
   return new ValidationStub()
 }
 
+const makeCreateToolsStub = (): CreateTools => {
+  class CreateToolsStub implements CreateTools {
+    async create(param: CreateToolsParam): Promise<ToolsModel> {
+      return await Promise.resolve({
+        id: faker.random.uuid(),
+        title: 'Notion',
+        link: 'https://notion.so',
+        description:
+          'All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. ',
+        tags: [
+          'organization',
+          'planning',
+          'collaboration',
+          'writing',
+          'calendar',
+        ],
+      })
+    }
+  }
+
+  return new CreateToolsStub()
+}
+
 const makeSut = (): SutTypes => {
   const validationStub = makeValidationStub()
-  const sut = new CreateToolsController(validationStub)
+  const createToolsStub = makeCreateToolsStub()
+  const sut = new CreateToolsController(validationStub, createToolsStub)
 
   return {
     sut,
     validationStub,
+    createToolsStub,
   }
 }
 
@@ -66,5 +99,13 @@ describe('CreateTools Controller', () => {
     const httpRequest = mockHttpRequest()
     const response = await sut.handle(httpRequest)
     expect(response).toEqual(badRequest(error))
+  })
+
+  test('should call CreateTools method with correct values', async () => {
+    const { sut, createToolsStub } = makeSut()
+    const createSpy = jest.spyOn(createToolsStub, 'create')
+    const httpRequest = mockHttpRequest()
+    await sut.handle(httpRequest)
+    expect(createSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
