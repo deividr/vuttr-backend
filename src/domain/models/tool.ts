@@ -1,4 +1,4 @@
-export interface ToolsModel {
+export interface ToolModel {
   id: string
   title: string
   link: string

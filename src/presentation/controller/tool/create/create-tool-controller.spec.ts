@@ -3,19 +3,19 @@ import { badRequest, ok } from '$/presentation/helpers/http/http-helpers'
 import { Controller } from '$/presentation/protocols/controller'
 import { HttpRequest } from '$/presentation/protocols/http'
 import { Validation } from '$/presentation/protocols/validation'
-import { CreateToolsController } from './create-tools-controller'
+import { CreateToolController } from './create-tool-controller'
 import {
-  CreateTools,
-  CreateToolsParam,
-} from '$/domain/usercases/tools/create-tools'
-import { ToolsModel } from '$/domain/models/tools'
+  CreateTool,
+  CreateToolParam,
+} from '$/domain/usercases/tool/create-tool'
+import { ToolModel } from '$/domain/models/tool'
 
 import faker from 'faker'
 
 interface SutTypes {
   sut: Controller
   validationStub: Validation
-  createToolsStub: CreateToolsStub
+  createToolStub: CreateToolStub
 }
 
 const mockHttpRequest = (): HttpRequest => {
@@ -43,10 +43,10 @@ const makeValidationStub = (): Validation => {
 
   return new ValidationStub()
 }
-class CreateToolsStub implements CreateTools {
-  toolsModel: ToolsModel
+class CreateToolStub implements CreateTool {
+  toolsModel: ToolModel
 
-  async create(param: CreateToolsParam): Promise<ToolsModel> {
+  async create(param: CreateToolParam): Promise<ToolModel> {
     this.toolsModel = {
       id: faker.random.uuid(),
       ...param,
@@ -58,13 +58,13 @@ class CreateToolsStub implements CreateTools {
 
 const makeSut = (): SutTypes => {
   const validationStub = makeValidationStub()
-  const createToolsStub = new CreateToolsStub()
-  const sut = new CreateToolsController(validationStub, createToolsStub)
+  const createToolsStub = new CreateToolStub()
+  const sut = new CreateToolController(validationStub, createToolsStub)
 
   return {
     sut,
     validationStub,
-    createToolsStub,
+    createToolStub: createToolsStub,
   }
 }
 
@@ -91,7 +91,7 @@ describe('CreateTools Controller', () => {
   })
 
   test('should call CreateTools method with correct values', async () => {
-    const { sut, createToolsStub } = makeSut()
+    const { sut, createToolStub: createToolsStub } = makeSut()
     const createSpy = jest.spyOn(createToolsStub, 'create')
     const httpRequest = mockHttpRequest()
     await sut.handle(httpRequest)
@@ -99,7 +99,7 @@ describe('CreateTools Controller', () => {
   })
 
   test('should return 200 if valid params are provided ', async () => {
-    const { sut, createToolsStub } = makeSut()
+    const { sut, createToolStub: createToolsStub } = makeSut()
     const httpResponse = await sut.handle(mockHttpRequest())
     expect(httpResponse).toEqual(ok(createToolsStub.toolsModel))
   })
