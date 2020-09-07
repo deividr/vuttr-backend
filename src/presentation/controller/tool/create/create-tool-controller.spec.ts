@@ -11,6 +11,7 @@ import {
 import { ToolModel } from '$/domain/models/tool'
 
 import faker from 'faker'
+import { ToolAlreadyExistError } from '$/presentation/errors/tool-already-exist-error'
 
 interface SutTypes {
   sut: Controller
@@ -46,7 +47,7 @@ const makeValidationStub = (): Validation => {
 class CreateToolStub implements CreateTool {
   toolsModel: ToolModel
 
-  async create(param: CreateToolParam): Promise<ToolModel> {
+  async create(param: CreateToolParam): Promise<ToolModel | null> {
     this.toolsModel = {
       id: faker.random.uuid(),
       ...param,
@@ -96,6 +97,13 @@ describe('CreateTools Controller', () => {
     const httpRequest = mockHttpRequest()
     await sut.handle(httpRequest)
     expect(createSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('should return 400 if tool provided already exist', async () => {
+    const { sut, createToolStub } = makeSut()
+    jest.spyOn(createToolStub, 'create').mockResolvedValueOnce(null)
+    const httpResponse = await sut.handle(mockHttpRequest())
+    expect(httpResponse).toEqual(badRequest(new ToolAlreadyExistError()))
   })
 
   test('should return 200 if valid params are provided ', async () => {
