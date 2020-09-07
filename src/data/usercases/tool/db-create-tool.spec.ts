@@ -1,4 +1,5 @@
 import { CreateToolRepository } from '$/data/protocols/db/tool/create-tool-repository'
+import { LoadToolByTitleRepository } from '$/data/protocols/db/tool/load-tool-by-title-repository'
 import { ToolModel } from '$/domain/models/tool'
 import {
   CreateTool,
@@ -10,6 +11,7 @@ import { DbCreateTool } from './db-create-tool'
 interface SutTypes {
   sut: CreateTool
   createToolRepositoryStub: CreateToolRepository
+  loadToolByTitleRepositoryStub: LoadToolByTitleRepository
 }
 
 const mockToolParam = (): CreateToolParam => {
@@ -32,13 +34,28 @@ const makeCreateToolRepositoryStub = (): CreateToolRepository => {
   return new CreateToolRepositoryStub()
 }
 
+const makeLoadToolByTitleRepositoryStub = (): LoadToolByTitleRepository => {
+  class LoadToolByTitleRespositoryStub implements LoadToolByTitleRepository {
+    async loadByTitle(title: string): Promise<ToolModel | null> {
+      return await Promise.resolve(null)
+    }
+  }
+
+  return new LoadToolByTitleRespositoryStub()
+}
+
 const makeSut = (): SutTypes => {
   const createToolRepositoryStub = makeCreateToolRepositoryStub()
-  const sut = new DbCreateTool(createToolRepositoryStub)
+  const loadToolByTitleRepositoryStub = makeLoadToolByTitleRepositoryStub()
+  const sut = new DbCreateTool(
+    createToolRepositoryStub,
+    loadToolByTitleRepositoryStub,
+  )
 
   return {
     sut,
     createToolRepositoryStub,
+    loadToolByTitleRepositoryStub,
   }
 }
 
@@ -49,5 +66,19 @@ describe('Database Create Tool Case', () => {
     const toolParam = mockToolParam()
     await sut.create(toolParam)
     expect(createSpy).toHaveBeenCalledWith(toolParam)
+  })
+
+  test('should return null if tool already exist', async () => {
+    const { sut, loadToolByTitleRepositoryStub } = makeSut()
+
+    jest
+      .spyOn(loadToolByTitleRepositoryStub, 'loadByTitle')
+      .mockResolvedValueOnce({
+        id: faker.random.uuid(),
+        ...mockToolParam(),
+      })
+
+    const response = await sut.create(mockToolParam())
+    expect(response).toBeNull()
   })
 })
