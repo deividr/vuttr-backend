@@ -117,7 +117,7 @@ describe('CreateTools Controller', () => {
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 
-  test('should return 200 if valid params are provided ', async () => {
+  test('should return 200 if valid params are provided', async () => {
     const { sut, createToolStub: createToolsStub } = makeSut()
     const httpResponse = await sut.handle(mockHttpRequest())
     expect(httpResponse).toEqual(ok(createToolsStub.toolsModel))
