@@ -81,4 +81,11 @@ describe('Database Create Tool Case', () => {
     const response = await sut.create(mockToolParam())
     expect(response).toBeNull()
   })
+
+  test('should return ToolModel if create with success', async () => {
+    const { sut } = makeSut()
+    const toolModel = await sut.create(mockToolParam())
+    expect(toolModel).toBeTruthy()
+    expect(toolModel).toHaveProperty('id')
+  })
 })
