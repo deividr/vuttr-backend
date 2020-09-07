@@ -112,9 +112,7 @@ describe('CreateTools Controller', () => {
 
   test('should return 500 if return any server error', async () => {
     const { sut, createToolStub } = makeSut()
-
     jest.spyOn(createToolStub, 'create').mockRejectedValueOnce(new Error())
-
     const httpResponse = await sut.handle(mockHttpRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })
