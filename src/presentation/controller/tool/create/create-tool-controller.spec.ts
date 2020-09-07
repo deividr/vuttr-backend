@@ -1,5 +1,9 @@
 import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
-import { badRequest, ok } from '$/presentation/helpers/http/http-helpers'
+import {
+  badRequest,
+  ok,
+  serverError,
+} from '$/presentation/helpers/http/http-helpers'
 import { Controller } from '$/presentation/protocols/controller'
 import { HttpRequest } from '$/presentation/protocols/http'
 import { Validation } from '$/presentation/protocols/validation'
@@ -104,6 +108,15 @@ describe('CreateTools Controller', () => {
     jest.spyOn(createToolStub, 'create').mockResolvedValueOnce(null)
     const httpResponse = await sut.handle(mockHttpRequest())
     expect(httpResponse).toEqual(badRequest(new ToolAlreadyExistError()))
+  })
+
+  test('should return 500 if return any server error', async () => {
+    const { sut, createToolStub } = makeSut()
+
+    jest.spyOn(createToolStub, 'create').mockRejectedValueOnce(new Error())
+
+    const httpResponse = await sut.handle(mockHttpRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('should return 200 if valid params are provided ', async () => {

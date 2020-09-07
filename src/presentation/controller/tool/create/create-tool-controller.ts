@@ -1,6 +1,11 @@
 import { CreateTool } from '$/domain/usercases/tool/create-tool'
+import { InvalidParamError } from '$/presentation/errors/invalid-param-error'
 import { ToolAlreadyExistError } from '$/presentation/errors/tool-already-exist-error'
-import { badRequest, ok } from '$/presentation/helpers/http/http-helpers'
+import {
+  badRequest,
+  ok,
+  serverError,
+} from '$/presentation/helpers/http/http-helpers'
 import { Controller } from '$/presentation/protocols/controller'
 import { HttpRequest, HttpResponse } from '$/presentation/protocols/http'
 import { Validation } from '$/presentation/protocols/validation'
@@ -23,7 +28,11 @@ export class CreateToolController implements Controller {
         return badRequest(new ToolAlreadyExistError())
       }
     } catch (error) {
-      return badRequest(error)
+      if (error instanceof InvalidParamError) {
+        return badRequest(error)
+      } else {
+        return serverError(error)
+      }
     }
   }
 }
